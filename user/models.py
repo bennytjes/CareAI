@@ -1,25 +1,24 @@
 from django.db import models
-
+from django.contrib.auth.models import User
+from datetime import date
+from django.utils import timezone
 # Create your models here.
 
 class UserDetail(models.Model):
-    Username = models.CharField(max_length = 20)
-    Is_Supplier = models.BooleanField()
-    First_Name = models.CharField(max_length = 20)
-    Last_Name = models.CharField(max_length = 20)
-    Organisation = models.CharField(max_length = 50)
-    Town_City = models.CharField(max_length = 20)
-    Post_Code = models.CharField(max_length = 10)
-    Phone = models.IntegerField()
-    Email = models.EmailField()
+    user_id = models.OneToOneField(User,on_delete = models.CASCADE,primary_key = True,default=0,db_column='user_id')
+    username = models.CharField(max_length = 50)
+    is_supplier = models.BooleanField(default = False)
+    first_name = models.CharField(max_length = 20,null=True)
+    last_name = models.CharField(max_length = 20,null=True)
+    organisation = models.CharField(max_length = 50,null=True)
+    town_city = models.CharField(max_length = 20,null=True)
+    post_code = models.CharField(max_length = 10,null=True)
+    phone = models.CharField(max_length = 20,null=True)
 
-class UserAuth(models.Model):
-    User_ID = models.OneToOneField(UserDetail,on_delete= models.CASCADE,primary_key = True)
-    Password = models.CharField(max_length = 100)
-    mobile = models.IntegerField()
 
 class Products(models.Model):
-    User_ID = models.ForeignKey(UserDetail,on_delete = models.CASCADE)
-    Added_Date = models.DateField()
-    Category = models.CharField(max_length = 30)
-    Description = models.TextField()
+    user_id = models.ForeignKey(User,on_delete = models.CASCADE)
+    product_name = models.CharField(max_length = 100,default = 'product name')
+    added_date = models.DateField(default=timezone.now().date())
+    category = models.CharField(max_length = 30)
+    description = models.TextField()

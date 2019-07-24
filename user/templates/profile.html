@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Profile</h1>
+<h2>{{ user }}</h2>
+<p> Username : {{ detail.username }} </p>
+<p> Is Supplier : {{ detail.is_supplier }}</p>
+<p> First Name: {{ detail.first_name }} </p>
+<p> Last Name: {{ detail.last_name }} </p>
+<p> Organisation: {{ detail.organisation }} </p>
+<p> Post Code: {{ detail.post_code }} </p>
+<p> Phone : {{ detail.phone }} </p>
+
+<p> {{ is_none }}</p>
+<title>Profile</title>
+<a href='/user/profile/edit'>Edit Profile</a>
+<a>Change Password </a>
+
+{% endblock %}

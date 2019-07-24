@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Products</h1>
+
+<form method="POST">
+
+    {% csrf_token %}
+    {{ form }}
+    <p>
+        <a href='/user/products/register/'>Register a new product </a>
+    </p>
+</form>
+{% endblock %}

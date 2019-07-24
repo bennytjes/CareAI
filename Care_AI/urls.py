@@ -1,3 +1,5 @@
+from . import views
+
 """mysite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -17,6 +19,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    path('', views.home, name = 'home'),
     path('polls/', include('polls.urls')),
     path('admin/', admin.site.urls),
+    path('user/', include('user.urls')),
 ]
