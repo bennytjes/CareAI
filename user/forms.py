@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UserDetail, Products
+from .models import UserDetails, Products
 from datetime import date
 
 
@@ -29,7 +29,7 @@ class RegistrationForm(UserCreationForm):
 
 class UserDetailForm(forms.ModelForm):
     class Meta:
-        model= UserDetail
+        model= UserDetails
         fields = [
             'username',
             'is_supplier',

@@ -3,27 +3,36 @@ from user.models import Products
 
 # Create your models here.
 class Questions(models.Model):
+    description = models.TextField()
+    in_principle = models.IntegerField()
 
-    Description = models.TextField()
-    In_Principle = models.IntegerField()
-
-
-class Version(models.Model):
-    Online_Date = models.DateField()
+class Versions(models.Model):
+    online_date = models.DateField()
 
 
-class Version_Question(models.Model):
-    Version_ID = models.ForeignKey(Version,on_delete= models.CASCADE)
-    Question_ID = models.ForeignKey(Questions,on_delete= models.CASCADE)
+class VersionToQuestion(models.Model):
+    version_id = models.ForeignKey(Versions,on_delete= models.CASCADE)
+    question_id = models.ForeignKey(Questions,on_delete= models.CASCADE)
     class Meta:
-        unique_together = ('Version_ID','Question_ID')
+        unique_together = ('version_id','question_id')
 
-class Entry(models.Model):
-    Product_ID = models.ForeignKey(Products,on_delete= models.CASCADE)
-    Version_ID = models.ForeignKey(Version,on_delete = models.CASCADE)
-    Entry_time = models.DateTimeField()
+class Entries(models.Model):
+    product_id = models.ForeignKey(Products,on_delete= models.CASCADE)
+    version_id = models.ForeignKey(Versions,on_delete = models.CASCADE)
+    entry_time = models.DateTimeField()
+    principle = models.IntegerField()
+    jotform_submission_id = models.CharField(max_length = 30)
+
+    #might need to add principle
+    #might need to add the JotForm submission ID
 
 class Answers(models.Model):
-    Entry_ID = models.ForeignKey(Entry,on_delete=models.CASCADE)
-    Question_ID = models.ForeignKey(Questions,on_delete = models.CASCADE)
-    Answers = models.TextField()
+    entry_id = models.ForeignKey(Entries,on_delete=models.CASCADE)
+    question_id = models.ForeignKey(Questions,on_delete = models.CASCADE)
+    answers = models.TextField()
+
+class JotFormIDs(models.Model):
+    principle = models.IntegerField()
+    jotform_id = models.CharField(max_length = 30)
+
+    

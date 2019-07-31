@@ -4,9 +4,9 @@ from datetime import date
 from django.utils import timezone
 # Create your models here.
 
-class UserDetail(models.Model):
+class UserDetails(models.Model):
     user_id = models.OneToOneField(User,on_delete = models.CASCADE,primary_key = True,default=0,db_column='user_id')
-    username = models.CharField(max_length = 50)
+    username = models.CharField(max_length = 50,null=True)
     is_supplier = models.BooleanField(default = False)
     first_name = models.CharField(max_length = 20,null=True)
     last_name = models.CharField(max_length = 20,null=True)
@@ -17,7 +17,8 @@ class UserDetail(models.Model):
 
 
 class Products(models.Model):
-    user_id = models.ForeignKey(User,on_delete = models.CASCADE)
+    product_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User,on_delete = models.CASCADE,db_column='user_id')
     product_name = models.CharField(max_length = 100,default = 'product name')
     added_date = models.DateField(default=timezone.now().date())
     category = models.CharField(max_length = 30)

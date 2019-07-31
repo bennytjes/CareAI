@@ -3,11 +3,20 @@
 {% block content %}
 
 <h1>Products</h1>
+{% for product in products %}
+<p> ------------------------------------ </p>
+<p> ID: {{ product.product_id}} </p>
+<p> Product Name: {{ product.product_name }}</p>
+<p> Added Date: {{ product.added_date }} </p>
+<p> Category: {{ product.category }}</p>
+<p><a href='/form/{{ product.product_id }}/principlelist'>Edit Compliance Form</a></p>
+{% endfor %}
+
 
 <form method="POST">
 
     {% csrf_token %}
-    {{ form }}
+    
     <p>
         <a href='/user/products/register/'>Register a new product </a>
     </p>

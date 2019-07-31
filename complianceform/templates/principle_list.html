@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Principle List</h1>
+
+
+{{ productInfo }}
+
+{% if productInfo %}
+    <ul>
+    {% for principle in principleList %}
+        <li><a href="/form/{{ product_id }}/{{ forloop.counter }}/jot">Edit {{ principle }} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+{% endblock %}

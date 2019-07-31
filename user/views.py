@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from user.forms import RegistrationForm , UserDetailForm , ProductsRegisterForm
 from datetime import date
-from .models import UserDetail, Products
+from .models import UserDetails, Products
 
 
 # Create your views here.
@@ -29,7 +29,7 @@ def register(request):
             newUser = {'username':form.cleaned_data.get('username'),
                        'user_id_id':User.objects.get(username = form.cleaned_data.get('username')).pk,}
                     #    'is_supplier':form.cleaned_data.get('is_supplier')}
-            newUserRow = UserDetail(**newUser)
+            newUserRow = UserDetails(**newUser)
             newUserRow.save()
             autoLogin = auth.authenticate(username=form.cleaned_data['username'],
                                      password=form.cleaned_data['password1'],
@@ -46,7 +46,7 @@ def register(request):
         return render(request, 'reg_form.html', args)
 
 def profile(request):
-    detail_dict = UserDetail.objects.get(user_id = request.user.id).__dict__
+    detail_dict = UserDetails.objects.get(user_id = request.user.id).__dict__
     if None in detail_dict.values():
         return redirect('/user/profile/edit/')
     args={'user':request.user,'detail' : detail_dict,'logged_in' : request.user}
@@ -78,7 +78,7 @@ def profile_edit(request):
             p.save()
             return redirect('/user/profile/')
     else:
-        userdata = UserDetail.objects.get(user_id=request.user.pk).__dict__
+        userdata = UserDetails.objects.get(user_id=request.user.pk).__dict__
         form = UserDetailForm(userdata)
         args = {'form':form,'test':userdata}
         return render(request,'profile_edit.html',args)
@@ -89,7 +89,7 @@ def products(request):
     except:
         productdata = None
 
-    args = {'form':productdata}
+    args = {'products':productdata}
     return render(request, 'products.html', args)
 
 def products_register(request):

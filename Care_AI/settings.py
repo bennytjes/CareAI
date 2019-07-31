@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'polls.apps.PollsConfig',
     'user.apps.UserConfig',
-    'complianceform.apps.ComplianceformConfig'
+    'complianceform.apps.ComplianceformConfig',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,9 +82,9 @@ WSGI_APPLICATION = 'Care_AI.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'xoysyvrr',
-        'USER': 'xoysyvrr',
-        'PASSWORD': '6i3Eew7vLzofbERgVvS288pvuSJ1hRbq',
+        'NAME': 'lzgsgafa',
+        'USER': 'lzgsgafa',
+        'PASSWORD': 'WTHu3Q8x7elW66naqsWDsE3myTuBG9Cd',
         'HOST': 'manny.db.elephantsql.com',
         'PORT': '5432',
     }
