@@ -7,7 +7,10 @@ from datetime import date
 
 JFAPI_KEY = '7746a94a4b70e6826b90564723ec8049'
 
-def principle_list(request,product_id):
+def get_form_url():
+    return {'url':'a/a/a'}
+
+def principle_list(request,product_id,principle_id):
     product = get_object_or_404(Products,pk = product_id).__dict__
     principleList = { 
         'principle 1' : { 'href' : 1},
@@ -16,15 +19,24 @@ def principle_list(request,product_id):
         'principle 4' : { 'href' : 4},
         'principle 5' : { 'href' : 5}}
     
-
+    form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
+    url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)
     
-    return render(request, 'principle_list.html', {'productInfo': product,'principleList': principleList , 'product_id':product_id})
+    return render(request, 'principle_list.html', {'url':url,'productInfo': product,'principleList': principleList , 'product_id':product_id})
 
 def jot(request,product_id,principle_id):
+    product = get_object_or_404(Products,pk = product_id).__dict__
+    principleList = { 
+        'principle 1' : { 'href' : 1},
+        'principle 2' : { 'href' : 2},
+        'principle 3' : { 'href' : 3},
+        'principle 4' : { 'href' : 4},
+        'principle 5' : { 'href' : 5}}
+
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
     url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)
 
-    return render(request, 'jotformembed.html', { 'url':url}  )
+    return render(request, 'jotformembed.html', { 'url':url,'productInfo': product,'principleList': principleList, 'product_id':product_id }  )
 
 def form_completed(request, product_id, principle_id):
     if request.method =='POST':
