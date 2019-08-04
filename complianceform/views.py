@@ -15,7 +15,7 @@ def principle_list(request,product_id,principle_id):
     oneToTen = range(1,11)
     
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
-    url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)
+    url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)+'&username=' + str(request.user)
     args = {'url':url, 
             'productInfo':product,
             'oneToTen':oneToTen,
@@ -24,42 +24,54 @@ def principle_list(request,product_id,principle_id):
     return render(request, 'principle_list.html', args)
 
 
-def form_completed(request, product_id, principle_id):
+def form_completed(request, principle_id):
     
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
-    r = requests.get('https://api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&limit=20').json()['content']
-    createdAt = r['created_at']
-    submissionID = r['id']
+    r = requests.get('https://api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&orderby=created_at').json()['content']
     saveAnswer = []
+    subFound = False
+    rightSubmission = None
     for submission in r:
         for field in submission['answers'].values():
-            if field['name'].lower().startswith('question_id'):
-                qpk = int(field['name'][12:])
-                try:
-                    answer = field['answer']
-                except:
-                    answer = 'None'
-                saveAnswer.append([qpk,answer])
-            elif field['name'].lower().startswith('version'):
-                version = int(field['text'])
-            elif field['name'].lower().startswith('product_id'):
-                if field['answer'] != str(product_id):
-                    pass
+            if field['name'].lower().startswith('username') and field['answer'] == str(request.user):
+                subFound = True
+                rightSubmission = submission
+                submissionID = submission['id']
+                createdAt = submission['created_at']
+                break
+        if subFound == True:
+            break
 
-        try:
-            newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt)
-            message = 'No new entry'
-            return render(request,'form_completed.html', {'message':message})
-        except:
-            newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt, jotform_submission_id = submissionID, principle = principle_id )
-            newEntry.save()
+    if not rightSubmission:
+        return render(request, 'form_completed.html', {'message': 'no new sub'})
 
-        for qpk, answer in saveAnswer:
-            newAnswer = Answers(entry_id_id = newEntry.pk, question_id_id = qpk, answers = answer)
-            newAnswer.save()
+    for field in rightSubmission['answers'].values():
+        if field['name'].lower().startswith('question_id'):
+            qpk = int(field['name'][12:])
+            try:
+                answer = field['answer']
+            except:
+                answer = 'None'
+            saveAnswer.append([qpk,answer])
+        elif field['name'].lower().startswith('version'):
+            version = int(field['text'])
+        elif field['name'].lower().startswith('product_id'):
+            product_id = int(field['answer'])
 
-        message = 'Entry saved'
+    try:
+        newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt)
+        message = 'No new entry'
         return render(request,'form_completed.html', {'message':message})
+    except:
+        newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt, jotform_submission_id = submissionID, principle = principle_id )
+        newEntry.save()
+
+    for qpk, answer in saveAnswer:
+        newAnswer = Answers(entry_id_id = newEntry.pk, question_id_id = qpk, answers = answer)
+        newAnswer.save()
+
+    message = 'Entry saved'
+    return render(request,'form_completed.html', {'message':message})
 
 
 
@@ -80,6 +92,7 @@ def form_changed(request):
             'submit button' : 'submit',
             'product id' : 'product',
             'version id' : 'version',
+            'username': 'username'
         }
         # Itterate through the forms
         for ID in form_IDs:
@@ -117,7 +130,10 @@ def form_changed(request):
             newVersion = Versions(online_date = date.today())
             newVersion.save()
             for qid in questionIDInThisVersion:
-                VersionToQuestion(version_id_id = newVersion.pk,question_id_id = qid).save()
+                try:
+                    VersionToQuestion(version_id_id = newVersion.pk,question_id_id = qid).save()
+                except:
+                    pass
             success = 'form changed'
 
             for ID,qid in changeFormVersion:
@@ -131,6 +147,3 @@ def form_changed(request):
         return render(request,'form_changed.html',{'message':message, 'success':success})
 
     return render(request,'form_changed.html')
-
-def showpost(request):
-    return render(request,'showpost.html', {'postdata':request})
