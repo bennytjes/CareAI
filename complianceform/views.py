@@ -12,40 +12,27 @@ def get_form_url():
 
 def principle_list(request,product_id,principle_id):
     product = get_object_or_404(Products,pk = product_id).__dict__
-    principleList = { 
-        'principle 1' : { 'href' : 1},
-        'principle 2' : { 'href' : 2},
-        'principle 3' : { 'href' : 3},
-        'principle 4' : { 'href' : 4},
-        'principle 5' : { 'href' : 5}}
+    oneToTen = range(1,11)
     
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
     url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)
+    args = {'url':url, 
+            'productInfo':product,
+            'oneToTen':oneToTen,
+            'product_id':product_id}
     
-    return render(request, 'principle_list.html', {'url':url,'productInfo': product,'principleList': principleList , 'product_id':product_id})
+    return render(request, 'principle_list.html', args)
 
-def jot(request,product_id,principle_id):
-    product = get_object_or_404(Products,pk = product_id).__dict__
-    principleList = { 
-        'principle 1' : { 'href' : 1},
-        'principle 2' : { 'href' : 2},
-        'principle 3' : { 'href' : 3},
-        'principle 4' : { 'href' : 4},
-        'principle 5' : { 'href' : 5}}
-
-    form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
-    url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)
-
-    return render(request, 'jotformembed.html', { 'url':url,'productInfo': product,'principleList': principleList, 'product_id':product_id }  )
 
 def form_completed(request, product_id, principle_id):
-    if request.method =='POST':
-        form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
-        r = requests.get('https://api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&limit=1').json()['content'][0]
-        createdAt = r['created_at']
-        submissionID = r['id'] 
-        saveAnswer = []
-        for field in r['answers'].values():
+    
+    form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
+    r = requests.get('https://api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&limit=20').json()['content']
+    createdAt = r['created_at']
+    submissionID = r['id']
+    saveAnswer = []
+    for submission in r:
+        for field in submission['answers'].values():
             if field['name'].lower().startswith('question_id'):
                 qpk = int(field['name'][12:])
                 try:
@@ -55,6 +42,9 @@ def form_completed(request, product_id, principle_id):
                 saveAnswer.append([qpk,answer])
             elif field['name'].lower().startswith('version'):
                 version = int(field['text'])
+            elif field['name'].lower().startswith('product_id'):
+                if field['answer'] != str(product_id):
+                    pass
 
         try:
             newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt)
@@ -70,7 +60,7 @@ def form_completed(request, product_id, principle_id):
 
         message = 'Entry saved'
         return render(request,'form_completed.html', {'message':message})
-    return render(request,'form_completed.html', {'message': 'press the button'})
+
 
 
 
@@ -141,3 +131,6 @@ def form_changed(request):
         return render(request,'form_changed.html',{'message':message, 'success':success})
 
     return render(request,'form_changed.html')
+
+def showpost(request):
+    return render(request,'showpost.html', {'postdata':request})

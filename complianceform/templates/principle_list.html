@@ -8,9 +8,10 @@
     <div class="col-sm-4">
 
         {% if productInfo %}
+        <h2>{{ productInfo.product_name }}</h2>
             <ul>
-            {% for principle in principleList %}
-                <li><a href="/form/{{ product_id }}/{{ forloop.counter }}/principlelist">{{ principle }} </a></li>
+            {% for principleNo in oneToTen %}
+                <li><a href="/form/{{ product_id }}/{{ principleNo }}/principlelist">Principle {{ principleNo }} </a></li>
             {% endfor %}
             </ul>
         {% else %}
