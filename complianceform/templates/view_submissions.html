@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class ="row">
+    <div class = "col"> Entry time</div>
+    <div class = "col"> Principle </div>
+    <div class = "col"> View Entry</div>
+</div>
+{% for entry in entries %}
+<div class ="row">
+    <div class = "col"> {{ entry.entry_time }}</div>
+    <div class = "col"> {{ entry.principle }} </div>
+    <div class = "col"> 
+        <a href = "/form/view/{{ entry.id }}"> View</a>
+    </div>
+</div>
+{% endfor %}
+<p></p>
+{% for field in showEntry %}
+    <p>{{ field.question_id.description }}</p>
+    <p>{{ field.answers }}</p>
+{% endfor %}
+
+
+{% endblock %}

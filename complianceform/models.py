@@ -23,9 +23,6 @@ class Entries(models.Model):
     principle = models.IntegerField()
     jotform_submission_id = models.CharField(max_length = 30)
 
-    #might need to add principle
-    #might need to add the JotForm submission ID
-
 class Answers(models.Model):
     entry_id = models.ForeignKey(Entries,on_delete=models.CASCADE)
     question_id = models.ForeignKey(Questions,on_delete = models.CASCADE)
