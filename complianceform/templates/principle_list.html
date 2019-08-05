@@ -11,7 +11,7 @@
         <h2>{{ productInfo.product_name }}</h2>
             <ul>
             {% for principleNo in oneToTen %}
-                <li><a href="/form/{{ product_id }}/{{ principleNo }}/principlelist">Principle {{ principleNo }} </a></li>
+                <li><a href="/form/{{ principleNo }}/principlelist">Principle {{ principleNo }} </a></li>
             {% endfor %}
             </ul>
         {% else %}
@@ -19,7 +19,8 @@
         {% endif %}
     </div>
 <div class="col-sm-8">
-        <script type="text/javascript" src="{{ url }}"></script>
+    {% block embed %}
+    {% endblock %}
 </div>
 </div>
 

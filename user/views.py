@@ -105,3 +105,9 @@ def products_register(request):
         form = ProductsRegisterForm()
         args = {'form':form}
         return render(request,'products_register.html',args)
+
+def product_selected(request,product_id):
+    productdata = Products.objects.get(product_id = product_id)
+    request.session['product_id'] = product_id 
+    return render(request, 'product_selected.html',{'product':productdata})
+    

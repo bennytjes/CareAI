@@ -7,10 +7,9 @@ from datetime import date
 
 JFAPI_KEY = '7746a94a4b70e6826b90564723ec8049'
 
-def get_form_url():
-    return {'url':'a/a/a'}
 
-def principle_list(request,product_id,principle_id):
+def principle_list(request,principle_id):
+    product_id = request.session['product_id']
     product = get_object_or_404(Products,pk = product_id).__dict__
     oneToTen = range(1,11)
     
@@ -21,16 +20,22 @@ def principle_list(request,product_id,principle_id):
             'oneToTen':oneToTen,
             'product_id':product_id}
     
-    return render(request, 'principle_list.html', args)
+    return render(request, 'embeded_form.html', args)
 
 
 def form_completed(request, principle_id):
-    
+    product_id = request.session['product_id']
+    product = get_object_or_404(Products,pk = product_id).__dict__
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
     r = requests.get('https://api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&orderby=created_at').json()['content']
     saveAnswer = []
     subFound = False
     rightSubmission = None
+    oneToTen = range(1,11)
+    args = {'productInfo':product,
+            'oneToTen':oneToTen,
+            'product_id':product_id}
+
     for submission in r:
         for field in submission['answers'].values():
             if field['name'].lower().startswith('username') and field['answer'] == str(request.user):
@@ -43,7 +48,8 @@ def form_completed(request, principle_id):
             break
 
     if not rightSubmission:
-        return render(request, 'form_completed.html', {'message': 'no new sub'})
+        args['message'] = 'no new sub'
+        return render(request, 'form_completed.html', args)
 
     for field in rightSubmission['answers'].values():
         if field['name'].lower().startswith('question_id'):
@@ -60,8 +66,8 @@ def form_completed(request, principle_id):
 
     try:
         newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt)
-        message = 'No new entry'
-        return render(request,'form_completed.html', {'message':message})
+        args['message'] = 'No new entry'
+        return render(request,'form_completed.html', args)
     except:
         newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt, jotform_submission_id = submissionID, principle = principle_id )
         newEntry.save()
@@ -70,9 +76,11 @@ def form_completed(request, principle_id):
         newAnswer = Answers(entry_id_id = newEntry.pk, question_id_id = qpk, answers = answer)
         newAnswer.save()
 
-    message = 'Entry saved'
-    return render(request,'form_completed.html', {'message':message})
+    args['message'] = 'Entry saved'
+    return render(request,'form_completed.html', args)
 
+
+    
 
 
 
