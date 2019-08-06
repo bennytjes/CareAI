@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h1>
-    Edit User Detail
-</h1>
+
+<p><a href='/form/1/principlelist'>Edit Compliance Form</a></p>
+
 <form method="POST">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit">Submit</button>
+    <button type="submit">Submit Change</button>
 </form>
+
+
+
 {% endblock %}

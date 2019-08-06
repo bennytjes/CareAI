@@ -37,8 +37,7 @@ def register(request):
             auth.login(request, autoLogin)
             return redirect('/user/profile/')
         else:
-            messages.success(request, 'not success')
-            return redirect('/polls/')
+            return render(request, 'reg_form.html', {'form':form})
         
     else:
         form = RegistrationForm()
@@ -97,7 +96,6 @@ def products_register(request):
         form = ProductsRegisterForm(request.POST)
         if form.is_valid():
             p = form.save(commit = False)
-            p.user_id_id = request.user.pk
             p.added_date = date.today()
             p.save()
             return redirect('/user/products/')
@@ -106,8 +104,20 @@ def products_register(request):
         args = {'form':form}
         return render(request,'products_register.html',args)
 
-def product_selected(request,product_id):
-    productdata = Products.objects.get(product_id = product_id)
+def product_edit(request,product_id):
+    productData = Products.objects.get(product_id = product_id)
     request.session['product_id'] = product_id 
-    return render(request, 'product_selected.html',{'product':productdata})
+    if request.method == 'POST':
+        form = ProductsRegisterForm(request.POST)
+        if form.is_valid():
+            p = form.save(commit = False)
+            p.user_id_id = request.user.pk
+            p.product_id = product_id
+            p.save()
+            return render(request, 'product_edit.html',{'form' : form, 'product':productData})
+    else:
+        form = ProductsRegisterForm(productData.__dict__)
+        return render(request, 'product_edit.html',{'form' : form,'product':productData})
+
+    
     

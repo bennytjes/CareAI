@@ -12,9 +12,16 @@ def principle_list(request,principle_id):
     product_id = request.session['product_id']
     product = get_object_or_404(Products,pk = product_id).__dict__
     oneToTen = range(1,11)
-    
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
+
+    entries = Entries.objects.filter(product_id_id = product_id,principle = principle_id).order_by('-entry_time')
     url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)+'&username=' + str(request.user)
+    if entries.count() != 0: #no previous entry
+        entry_id = entries[0].id 
+        previousAnswers = Answers.objects.filter(entry_id_id = entry_id)
+        for answer in previousAnswers:
+            url += '&question_id_'+str(answer.question_id.id) + '=' + answer.answers
+            
     args = {'url':url, 
             'productInfo':product,
             'oneToTen':oneToTen,
@@ -57,7 +64,7 @@ def form_completed(request, principle_id):
             try:
                 answer = field['answer']
             except:
-                answer = 'None'
+                answer = ''
             saveAnswer.append([qpk,answer])
         elif field['name'].lower().startswith('version'):
             version = int(field['text'])

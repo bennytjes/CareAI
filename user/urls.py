@@ -11,6 +11,6 @@ urlpatterns = [
     path('profile/edit/', views.profile_edit,name = 'profile_edit'),
     path('products/', views.products, name = 'products'),
     path('products/register/', views.products_register, name = 'products_register'),
-    path('products/<int:product_id>',views.product_selected, name = 'product_selected'),
+    path('products/<int:product_id>',views.product_edit, name = 'product_edit'),
     
 ]
