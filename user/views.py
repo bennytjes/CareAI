@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from user.forms import RegistrationForm , UserDetailForm , ProductsRegisterForm
@@ -97,6 +97,7 @@ def products_register(request):
         if form.is_valid():
             p = form.save(commit = False)
             p.added_date = date.today()
+            p.user_id = request.user
             p.save()
             return redirect('/user/products/')
     else:
@@ -118,6 +119,15 @@ def product_edit(request,product_id):
     else:
         form = ProductsRegisterForm(productData.__dict__)
         return render(request, 'product_edit.html',{'form' : form,'product':productData})
-
     
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.POST,user = request.user)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('/user/profile/')
+    else:
+        form = PasswordChangeForm(user = request.user)
+        return render(request,'change_password.html',{'form': form})
     
