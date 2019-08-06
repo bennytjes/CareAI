@@ -164,6 +164,6 @@ def form_changed(request):
     return render(request,'form_changed.html')
 
 def view_submissions(request,entry_id):
-    entries = Entries.objects.filter(product_id_id = request.session['product_id'])
+    entries = Entries.objects.filter(product_id_id = request.session['product_id']).order_by('-entry_time')
     showEntry = Answers.objects.filter(entry_id_id = entry_id)
     return render(request, 'view_submissions.html', {'entries':entries , 'showEntry': showEntry})
