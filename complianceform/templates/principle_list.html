@@ -8,7 +8,7 @@
     <div class="col-sm-4">
 
         {% if productInfo %}
-        <h2>{{ productInfo.product_name }}</h2>
+        <h3>{{ productInfo.product_name }}</h3>
             <ul>
             {% for principleNo in oneToTen %}
                 <li><a href="/form/{{ principleNo }}/principlelist">Principle {{ principleNo }} </a></li>

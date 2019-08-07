@@ -116,6 +116,8 @@ def product_edit(request,product_id):
             p.product_id = product_id
             p.save()
             return render(request, 'product_edit.html',{'form' : form, 'product':productData})
+        else:
+            return render(request, 'product_edit.html',{'form' : form,'product':productData })
     else:
         form = ProductsRegisterForm(productData.__dict__)
         return render(request, 'product_edit.html',{'form' : form,'product':productData})

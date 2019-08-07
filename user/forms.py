@@ -51,8 +51,13 @@ class ProductsRegisterForm(forms.ModelForm):
             'product_name',
             'added_date',
             'category',
+            'other_category',
+            'deploy_point',
+            'other_deploy_point',
             'description',
         ]
         widgets = {
             'added_date':  forms.TextInput(attrs={'readonly': 'readonly'}),
+            'deploy_point': forms.CheckboxSelectMultiple(),
+            
         }

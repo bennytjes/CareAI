@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-
 <p><a href='/form/1/principlelist'>Edit Compliance Form</a></p>
-
+<p></p>
+<p></p>
 <form method="POST">
     {% csrf_token %}
     {{ form|crispy }}
