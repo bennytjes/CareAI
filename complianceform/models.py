@@ -22,6 +22,7 @@ class Entries(models.Model):
     entry_time = models.DateTimeField()
     principle = models.IntegerField()
     jotform_submission_id = models.CharField(max_length = 30)
+    score = models.FloatField(null = True, default = 0)
 
 class Answers(models.Model):
     entry_id = models.ForeignKey(Entries,on_delete=models.CASCADE)

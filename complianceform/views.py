@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import *
 import requests
 from datetime import date
+from django.db.models import Subquery,Max 
 # Create your views here.
 
 
@@ -76,12 +77,18 @@ def form_completed(request, principle_id):
         args['message'] = 'No new entry'
         return render(request,'form_completed.html', args)
     except:
+        qCount = 0
+        aCount = 0
         newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt, jotform_submission_id = submissionID, principle = principle_id )
+        for qpk, answer in saveAnswer:
+            qCount +=1
+            if answer != '': aCount +=1 
+            newAnswer = Answers(entry_id_id = newEntry.pk, question_id_id = qpk, answers = answer)
+            newAnswer.save()
+        newEntry.score = aCount/qCount
         newEntry.save()
 
-    for qpk, answer in saveAnswer:
-        newAnswer = Answers(entry_id_id = newEntry.pk, question_id_id = qpk, answers = answer)
-        newAnswer.save()
+    
 
     args['message'] = 'Entry saved'
     return render(request,'form_completed.html', args)
@@ -167,3 +174,35 @@ def view_submissions(request,entry_id):
     entries = Entries.objects.filter(product_id_id = request.session['product_id']).order_by('-entry_time')
     showEntry = Answers.objects.filter(entry_id_id = entry_id)
     return render(request, 'view_submissions.html', {'entries':entries , 'showEntry': showEntry})
+
+def radar(request):
+    product_id = request.session['product_id']
+    latestEntryFromUser = Entries.objects.raw(
+        f'''SELECT DISTINCT ON (principle) id, product_id_id,principle , score
+            FROM complianceform_entries
+            WHERE complianceform_entries.product_id_id = {product_id}
+            ORDER BY complianceform_entries.principle, entry_time DESC''')
+    userScore = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
+    pCount = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
+    pScore = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
+    allScore = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
+    for entry in latestEntryFromUser:
+        userScore[str(entry.principle)] = entry.score
+
+    latestEntryFromAll = Entries.objects.raw(
+        f'''SELECT DISTINCT ON (principle,product_id_id) id, product_id_id,principle , score
+            FROM complianceform_entries
+            ORDER BY complianceform_entries.principle, complianceform_entries.product_id_id, entry_time DESC''')
+    
+    for entry in latestEntryFromAll: 
+        pCount[str(entry.principle)] += 1
+        pScore[str(entry.principle)] += entry.score
+
+    for p in pScore:
+        try:
+            allScore[p] = pScore/pCount
+        except:
+            allScore[p] = 0
+
+    
+    return render(request, 'radar.html', {'user':userScore, 'all': allScore})

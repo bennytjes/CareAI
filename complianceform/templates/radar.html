@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% extends 'base.html'%}
+
+<html>
+		{% block content %}
+		{% load static %}
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ >
+		<title>Smoothed D3.js Radar Chart</title>
+
+		<!-- Google fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+
+		<!-- D3.js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		
+		<style>
+			body {
+				font-family: 'Open Sans', sans-serif;
+				font-size: 11px;
+				font-weight: 300;
+				fill: #242424;
+				text-align: center;
+				text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+				cursor: default;
+			}
+			
+			.legend {
+				font-family: 'Raleway', sans-serif;
+				fill: #333333;
+			}
+			
+			.tooltip {
+				fill: #333333;
+			}
+		</style>
+	
+	</head>
+	<body>
+		<h1>Radar Chart</h1>
+		<div class="radarChart"></div>
+		<script src="{% static 'radarChart.js' %}"></script>	
+		<script>
+      
+      /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+      
+			////////////////////////////////////////////////////////////// 
+			//////////////////////// Set-Up ////////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			var margin = {top: 100, right: 100, bottom: 100, left: 100},
+				width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+					
+			////////////////////////////////////////////////////////////// 
+			////////////////////////// Data ////////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			var data = [
+					  [//User's Percentage
+						{axis:"Principle 1",value: '{{ user.1 }}'},
+						{axis:"Principle 2",value: '{{ user.2 }}'},
+						{axis:"Principle 3",value: '{{ user.3 }}'},
+						{axis:"Principle 4",value: '{{ user.4 }}'},
+						{axis:"Principle 5",value: '{{ user.5 }}'},
+						{axis:"Principle 6",value: '{{ user.6 }}'},
+						{axis:"Principle 7",value: '{{ user.7 }}'},
+						{axis:"Principle 8",value: '{{ user.8 }}'},
+						{axis:"Principle 9",value: '{{ user.9 }}'},
+						{axis:"Principle 10",value: '{{ user.10 }}'},
+					  ],[//Total Percentage
+					  	{axis:"Principle 1",value:'{{ all.1 }}'},
+						{axis:"Principle 2",value:'{{ all.2 }}'},
+						{axis:"Principle 3",value:'{{ all.3 }}'},
+						{axis:"Principle 4",value:'{{ all.4 }}'},
+						{axis:"Principle 5",value:'{{ all.5 }}'},
+						{axis:"Principle 6",value:'{{ all.6 }}'},
+						{axis:"Principle 7",value:'{{ all.7 }}'},
+						{axis:"Principle 8",value:'{{ all.8 }}'},
+						{axis:"Principle 9",value:'{{ all.9 }}'},
+						{axis:"Principle 10",value:'{{ all.10 }}'},
+					  ]
+					];
+			////////////////////////////////////////////////////////////// 
+			//////////////////// Draw the Chart ////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			var color = d3.scale.ordinal()
+				.range(["#EDC951","#CC333F","#00A0B0"]);
+				
+			var radarChartOptions = {
+			  w: width,
+			  h: height,
+			  margin: margin,
+			  maxValue: 0.5,
+			  levels: 5,
+			  roundStrokes: false,
+			  color: color
+			};
+			//Call function to draw the Radar chart
+			RadarChart(".radarChart", data, radarChartOptions);
+		</script>
+	</body>
+{% endblock %}
+</html>

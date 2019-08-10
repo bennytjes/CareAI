@@ -4,5 +4,10 @@
     {% csrf_token %}
     <button type="submit">Form Changed</button>
 </form>
-{{ message }}
+{% for a in user %}
+{{ a.id }}
+{{ a.product_id_id}}
+{{ a.principle }}
+{% endfor %}
+{{ user }}
 {{ success }}
