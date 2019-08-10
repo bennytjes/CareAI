@@ -80,6 +80,7 @@ def form_completed(request, principle_id):
         qCount = 0
         aCount = 0
         newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt, jotform_submission_id = submissionID, principle = principle_id )
+        newEntry.save()
         for qpk, answer in saveAnswer:
             qCount +=1
             if answer != '': aCount +=1 
