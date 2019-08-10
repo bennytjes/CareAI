@@ -201,9 +201,9 @@ def radar(request):
 
     for p in pScore:
         try:
-            allScore[p] = pScore/pCount
+            allScore[p] = pScore[p]/pCount[p]
         except:
             allScore[p] = 0
 
     
-    return render(request, 'radar.html', {'user':userScore, 'all': allScore})
+    return render(request, 'radar.html', {'user':userScore ,'all': allScore})
