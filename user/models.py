@@ -49,3 +49,18 @@ class Products(models.Model):
     verbose_name='At which point of care do you expect your data-driven solution to be deployed? Select as many as applicable.')
     other_deploy_point = models.CharField(max_length = 100,blank = True, null = True,verbose_name = 'Other point of care:')
     description = models.TextField()
+
+class Scores(models.Model):
+    product_id = models.OneToOneField(Products,primary_key = True,on_delete= models.CASCADE)
+    principle_1 = models.IntegerField(default=0)
+    principle_2 = models.IntegerField(default=0)
+    principle_3 = models.IntegerField(default=0)
+    principle_4 = models.IntegerField(default=0)
+    principle_5 = models.IntegerField(default=0)
+    principle_6 = models.IntegerField(default=0)
+    principle_7 = models.IntegerField(default=0)
+    principle_8 = models.IntegerField(default=0)
+    principle_9 = models.IntegerField(default=0)
+    principle_10 = models.IntegerField(default=0)
+
+    

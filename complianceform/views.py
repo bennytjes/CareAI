@@ -1,8 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
+from user.models import *
 import requests
 from datetime import date
 from django.db.models import Subquery,Max 
+import json
+from django.http import JsonResponse 
+
 # Create your views here.
 
 
@@ -88,6 +92,17 @@ def form_completed(request, principle_id):
             newAnswer.save()
         newEntry.score = aCount/qCount
         newEntry.save()
+        try:
+            attrString = 'principle_'+ str(principle_id)
+            saveScore = Scores.objects.get(product_id_id = product_id)
+            setattr(saveScore, attrString , aCount/qCount)
+            saveScore.save()
+        except:
+            attrString = 'principle_'+ str(principle_id)
+            saveScore = Scores(product_id_id = product_id)
+            setattr(saveScore, attrString , aCount/qCount)
+            saveScore.save()
+        
 
     
 
@@ -205,5 +220,16 @@ def radar(request):
         except:
             allScore[p] = 0
 
-    
     return render(request, 'radar.html', {'user':userScore ,'all': allScore})
+
+def ranking(request):
+    return render(request, 'chart_example_from_d3-graph-gallery.html',)
+
+def returnJSON(request):
+    latestEntryFromAll = Entries.objects.raw(
+        f'''SELECT DISTINCT ON (principle,product_id_id) id, product_id_id,principle , score
+            FROM complianceform_entries
+            ORDER BY complianceform_entries.principle, complianceform_entries.product_id_id, entry_time DESC''')
+    
+    
+    return JsonResponse(somedict,safe=False)
