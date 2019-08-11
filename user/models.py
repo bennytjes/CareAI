@@ -52,15 +52,15 @@ class Products(models.Model):
 
 class Scores(models.Model):
     product_id = models.OneToOneField(Products,primary_key = True,on_delete= models.CASCADE)
-    principle_1 = models.IntegerField(default=0)
-    principle_2 = models.IntegerField(default=0)
-    principle_3 = models.IntegerField(default=0)
-    principle_4 = models.IntegerField(default=0)
-    principle_5 = models.IntegerField(default=0)
-    principle_6 = models.IntegerField(default=0)
-    principle_7 = models.IntegerField(default=0)
-    principle_8 = models.IntegerField(default=0)
-    principle_9 = models.IntegerField(default=0)
-    principle_10 = models.IntegerField(default=0)
+    principle_1 = models.FloatField(default=0)
+    principle_2 = models.FloatField(default=0)
+    principle_3 = models.FloatField(default=0)
+    principle_4 = models.FloatField(default=0)
+    principle_5 = models.FloatField(default=0)
+    principle_6 = models.FloatField(default=0)
+    principle_7 = models.FloatField(default=0)
+    principle_8 = models.FloatField(default=0)
+    principle_9 = models.FloatField(default=0)
+    principle_10 = models.FloatField(default=0)
 
     

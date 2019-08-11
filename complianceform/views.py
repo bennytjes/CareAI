@@ -97,16 +97,15 @@ def form_completed(request, principle_id):
             saveScore = Scores.objects.get(product_id_id = product_id)
             setattr(saveScore, attrString , aCount/qCount)
             saveScore.save()
+            
         except:
             attrString = 'principle_'+ str(principle_id)
             saveScore = Scores(product_id_id = product_id)
             setattr(saveScore, attrString , aCount/qCount)
             saveScore.save()
-        
+            args['message'] = aCount/qCount
 
-    
-
-    args['message'] = 'Entry saved'
+    # args['message'] = 'Entry saved'
     return render(request,'form_completed.html', args)
 
 
