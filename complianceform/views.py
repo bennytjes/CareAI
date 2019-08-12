@@ -3,9 +3,11 @@ from .models import *
 from user.models import *
 import requests
 from datetime import date
-from django.db.models import Subquery,Max 
+from django.db.models import Subquery,Max ,Avg
 import json
 from django.http import JsonResponse 
+from django.forms.models import model_to_dict
+from django.core.serializers import serialize
 
 # Create your views here.
 
@@ -103,9 +105,9 @@ def form_completed(request, principle_id):
             saveScore = Scores(product_id_id = product_id)
             setattr(saveScore, attrString , aCount/qCount)
             saveScore.save()
-            args['message'] = aCount/qCount
-
-    # args['message'] = 'Entry saved'
+            
+            
+    args['message'] = 'Entry saved'
     return render(request,'form_completed.html', args)
 
 
@@ -191,44 +193,36 @@ def view_submissions(request,entry_id):
     return render(request, 'view_submissions.html', {'entries':entries , 'showEntry': showEntry})
 
 def radar(request):
+    return render(request, 'radar.html' )
+
+
+def getProductScores(request):
     product_id = request.session['product_id']
-    latestEntryFromUser = Entries.objects.raw(
-        f'''SELECT DISTINCT ON (principle) id, product_id_id,principle , score
-            FROM complianceform_entries
-            WHERE complianceform_entries.product_id_id = {product_id}
-            ORDER BY complianceform_entries.principle, entry_time DESC''')
-    userScore = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
-    pCount = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
-    pScore = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
-    allScore = {'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0}
-    for entry in latestEntryFromUser:
-        userScore[str(entry.principle)] = entry.score
+    productScores = model_to_dict(Scores.objects.get(product_id_id = product_id))
+    allScores = Scores.objects.aggregate(Avg('principle_1'),Avg('principle_2'),Avg('principle_3'),Avg('principle_4'),Avg('principle_5'),Avg('principle_6'),Avg('principle_7'),Avg('principle_8'),Avg('principle_9'),Avg('principle_10'))
+    productScores.update(allScores)
+    return JsonResponse(productScores)
 
-    latestEntryFromAll = Entries.objects.raw(
-        f'''SELECT DISTINCT ON (principle,product_id_id) id, product_id_id,principle , score
-            FROM complianceform_entries
-            ORDER BY complianceform_entries.principle, complianceform_entries.product_id_id, entry_time DESC''')
-    
-    for entry in latestEntryFromAll: 
-        pCount[str(entry.principle)] += 1
-        pScore[str(entry.principle)] += entry.score
 
-    for p in pScore:
-        try:
-            allScore[p] = pScore[p]/pCount[p]
-        except:
-            allScore[p] = 0
-
-    return render(request, 'radar.html', {'user':userScore ,'all': allScore})
 
 def ranking(request):
-    return render(request, 'chart_example_from_d3-graph-gallery.html',)
+    return render(request, 'ranking.html',)
 
 def returnJSON(request):
-    latestEntryFromAll = Entries.objects.raw(
-        f'''SELECT DISTINCT ON (principle,product_id_id) id, product_id_id,principle , score
-            FROM complianceform_entries
-            ORDER BY complianceform_entries.principle, complianceform_entries.product_id_id, entry_time DESC''')
-    
-    
-    return JsonResponse(somedict,safe=False)
+    productScores = Scores.objects.raw('''SELECT *, (principle_1+principle_2+principle_3+principle_4+principle_5+principle_6+principle_7+principle_8+principle_9+principle_10) AS total
+                                           From user_scores
+                                           ORDER BY total''')
+    scoreList =[]
+    for row in productScores:
+        scoreList.append({'product_id':row.product_id_id,
+                          'principle_1':row.principle_1,
+                          'principle_2':row.principle_2,
+                          'principle_3':row.principle_3,
+                          'principle_4':row.principle_4,
+                          'principle_5':row.principle_5,
+                          'principle_6':row.principle_6,
+                          'principle_7':row.principle_7,
+                          'principle_8':row.principle_8,
+                          'principle_9':row.principle_9,
+                          'principle_10':row.principle_10})
+    return JsonResponse(scoreList,safe=False)

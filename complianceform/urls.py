@@ -11,5 +11,6 @@ urlpatterns = [
     path('view/<int:entry_id>', views.view_submissions, name = 'view_submission'),
     path('radar',views.radar, name = 'radar'),
     path('ranking',views.ranking, name = 'ranking'),
+    path('getProductScores', views.getProductScores, name = 'getProductScores'),
     path('returnJSON', views.returnJSON, name = 'returnJSON')
 ]
