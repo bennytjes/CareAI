@@ -214,12 +214,13 @@ def getProductScores(request):
 
 
 def ranking(request):
-    product_id = request.session['product_id']
-    product = get_object_or_404(Products,pk = product_id).__dict__
+    try:
+        product_id = request.session['product_id']
+    except:
+        product_id = 0
+    
     oneToTen = range(1,11)        
-    args = {'productInfo':product,
-            'oneToTen':oneToTen,
-            'product_id':product_id}
+    args = {'product_id':product_id}
     return render(request, 'ranking.html',args)
 
 
