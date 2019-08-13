@@ -7,7 +7,7 @@
 	
 function RadarChart(id, data, options) {
 	var cfg = {
-	 w: 600,				//Width of the circle
+	 w: 800,				//Width of the circle
 	 h: 600,				//Height of the circle
 	 margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
 	 levels: 3,				//How many levels or inner circles should there be drawn
@@ -30,7 +30,12 @@ function RadarChart(id, data, options) {
 	}//if
 	
 	//If the supplied maxValue is smaller than the actual one, replace by the max in the data
-	var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
+	//var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}))}));
+	var maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){
+		return d3.max(i.map(
+			function(o){ return o.value; }
+		))
+	}));
 		
 	var allAxis = (data[0].map(function(i, j){return i.axis})),	//Names of each axis
 		total = allAxis.length,					//The number of different axes
@@ -267,6 +272,33 @@ function RadarChart(id, data, options) {
 		  }
 		}
 	  });
+	  
 	}//wrap	
+	var legend2 = svg.selectAll(".legend2")
+        .data(cfg.color.range())
+        .enter().append("g")
+        .attr("class", "legend2")
+        .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
+       
+    legend2.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", function(d, i) {return cfg.color.range().slice().reverse()[i];});
+    
+    
+
+    legend2.append("text")
+        .attr("x", width + 5)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "start")
+        .text(function(d, i) { 
+		  switch (i) {
+			case 0: return 'Average'
+			case 1: return 'Your Product'
+		  }
+          }
+        );
 	
 }//RadarChart

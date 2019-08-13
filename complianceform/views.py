@@ -8,6 +8,7 @@ import json
 from django.http import JsonResponse 
 from django.forms.models import model_to_dict
 from django.core.serializers import serialize
+from django.db import connection
 
 # Create your views here.
 
@@ -28,7 +29,8 @@ def principle_list(request,principle_id):
         previousAnswers = Answers.objects.filter(entry_id_id = entry_id)
         for answer in previousAnswers:
             url += '&question_id_'+str(answer.question_id.id) + '=' + answer.answers
-            
+    
+
     args = {'url':url, 
             'productInfo':product,
             'oneToTen':oneToTen,
@@ -193,7 +195,13 @@ def view_submissions(request,entry_id):
     return render(request, 'view_submissions.html', {'entries':entries , 'showEntry': showEntry})
 
 def radar(request):
-    return render(request, 'radar.html' )
+    product_id = request.session['product_id']
+    product = get_object_or_404(Products,pk = product_id).__dict__
+    oneToTen = range(1,11)        
+    args = {'productInfo':product,
+            'oneToTen':oneToTen,
+            'product_id':product_id}
+    return render(request, 'radar.html',args )
 
 
 def getProductScores(request):
@@ -206,23 +214,73 @@ def getProductScores(request):
 
 
 def ranking(request):
-    return render(request, 'ranking.html',)
+    product_id = request.session['product_id']
+    product = get_object_or_404(Products,pk = product_id).__dict__
+    oneToTen = range(1,11)        
+    args = {'productInfo':product,
+            'oneToTen':oneToTen,
+            'product_id':product_id}
+    return render(request, 'ranking.html',args)
 
-def returnJSON(request):
-    productScores = Scores.objects.raw('''SELECT *, (principle_1+principle_2+principle_3+principle_4+principle_5+principle_6+principle_7+principle_8+principle_9+principle_10) AS total
-                                           From user_scores
-                                           ORDER BY total''')
+
+
+def rankingScore(request,group):
+    groupFilter = '' if group == 'All' else 'AND p.category = \'' + group+'\''
+    cursor = connection.cursor()
+    cursor.execute(f'''SELECT * , (s.principle_1+s.principle_2+s.principle_3+s.principle_4+s.principle_5+s.principle_6+s.principle_7+s.principle_8+s.principle_9+s.principle_10) AS total
+                      From user_scores AS s, user_products AS p
+                      WHERE s.product_id_id = p.product_id {groupFilter}
+                      ORDER BY total DESC''')
+    productScores = dictfetchall(cursor)
     scoreList =[]
     for row in productScores:
-        scoreList.append({'product_id':row.product_id_id,
-                          'principle_1':row.principle_1,
-                          'principle_2':row.principle_2,
-                          'principle_3':row.principle_3,
-                          'principle_4':row.principle_4,
-                          'principle_5':row.principle_5,
-                          'principle_6':row.principle_6,
-                          'principle_7':row.principle_7,
-                          'principle_8':row.principle_8,
-                          'principle_9':row.principle_9,
-                          'principle_10':row.principle_10})
+        scoreList.append({'product_name': row['product_name'],
+                          'total' : row['total'],
+                          'principle_1':row['principle_1'],
+                          'principle_2':row['principle_2'],
+                          'principle_3':row['principle_3'],
+                          'principle_4':row['principle_4'],
+                          'principle_5':row['principle_5'],
+                          'principle_6':row['principle_6'],
+                          'principle_7':row['principle_7'],
+                          'principle_8':row['principle_8'],
+                          'principle_9':row['principle_9'],
+                          'principle_10':row['principle_10']})
+    
     return JsonResponse(scoreList,safe=False)
+
+def groupRankingScore(request):
+    cursor = connection.cursor()
+    cursor.execute('''SELECT * , (s.principle_1+s.principle_2+s.principle_3+s.principle_4+s.principle_5+s.principle_6+s.principle_7+s.principle_8+s.principle_9+s.principle_10) AS total
+                      From user_scores AS s, user_products AS p
+                      WHERE s.product_id_id = p.product_id AND p.category = 'Health promotion'
+                      ORDER BY total DESC''')
+    scoreList =[]
+    for row in productScores:
+        scoreList.append({'product_name': row['product_name'],
+                          'total' : row['total'],
+                          'principle_1':row['principle_1'],
+                          'principle_2':row['principle_2'],
+                          'principle_3':row['principle_3'],
+                          'principle_4':row['principle_4'],
+                          'principle_5':row['principle_5'],
+                          'principle_6':row['principle_6'],
+                          'principle_7':row['principle_7'],
+                          'principle_8':row['principle_8'],
+                          'principle_9':row['principle_9'],
+                          'principle_10':row['principle_10']})
+    
+    return JsonResponse(scoreList,safe=False)
+
+def analytics(request):
+    return render(request, 'analytics.html')
+    
+
+def dictfetchall(cursor):
+    # "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+

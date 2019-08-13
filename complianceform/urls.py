@@ -9,8 +9,9 @@ urlpatterns = [
     path('<int:principle_id>/complete', views.form_completed, name = 'form_completed'),
     path('form_changed', views.form_changed, name = 'form_changed'),
     path('view/<int:entry_id>', views.view_submissions, name = 'view_submission'),
+    path('analytics', views.analytics, name = 'analytics'),
     path('radar',views.radar, name = 'radar'),
     path('ranking',views.ranking, name = 'ranking'),
     path('getProductScores', views.getProductScores, name = 'getProductScores'),
-    path('returnJSON', views.returnJSON, name = 'returnJSON')
+    path('ranking_score/<str:group>', views.rankingScore, name = 'ranking_score'),
 ]

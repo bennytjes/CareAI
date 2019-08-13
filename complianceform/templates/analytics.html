@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-2">
+<p><a href='/form/ranking'>Ranking (by group)</a></p>
+
+</div>
+<div class="col-sm-10">
+    {% block chart %}
+    {% endblock %}
+</div>
+</div>
+
+
+{% endblock %}

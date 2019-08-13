@@ -2,10 +2,9 @@
 
 {% block content %}
 
-<h1>Principle List</h1>
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-2">
 
         {% if productInfo %}
         <h3>{{ productInfo.product_name }}</h3>
@@ -16,11 +15,14 @@
             </ul>
             <p></p>
             <a href="/form/view/0">View Submissions</a>
+            <p></p>
+            <a href='/form/radar'>Radar</a>
+            <p></p>
         {% else %}
 
         {% endif %}
     </div>
-<div class="col-sm-8">
+<div class="col-sm-10">
     {% block embed %}
     {% endblock %}
 </div>
