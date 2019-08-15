@@ -204,6 +204,15 @@ def radar(request):
             'product_id':product_id}
     return render(request, 'radar.html',args )
 
+def radar_analytics(request):
+    product_id = request.session['product_id']
+    product = get_object_or_404(Products,pk = product_id).__dict__
+    oneToTen = range(1,11)        
+    args = {'productInfo':product,
+            'oneToTen':oneToTen,
+            'product_id':product_id}
+    return render(request, 'radar_analytics.html',args )
+
 
 def getProductScores(request):
     scoreList = []

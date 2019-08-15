@@ -13,6 +13,7 @@ urlpatterns = [
     path('radar',views.radar, name = 'radar'),
     path('completeness_ranking',views.completeness_ranking, name = 'completeness_ranking'),
     path('number_ranking',views.number_ranking, name = 'number_ranking'),
+    path('radar_analytics',views.radar_analytics, name = 'radar_analytics'),
     path('getProductScores', views.getProductScores, name = 'getProductScores'),
     path('ranking_score/<str:group>', views.rankingScore, name = 'ranking_score'),
 ]

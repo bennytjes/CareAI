@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% extends 'analytics.html'%}
+
+<html>
+		{% block chart %}
+		{% load static %}
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+
+		<!-- Google fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+
+		<!-- D3.js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		
+		<style>			
+			.legend {
+				font-family: 'Raleway', sans-serif;
+				fill: #333333;
+			}
+			
+			.tooltip {
+				fill: #333333;
+			}
+		</style>
+	
+	</head>
+	<body>
+		<h1>Radar Chart</h1>
+		<div class="radarChart"></div>
+		<script src="{% static 'radarChart.js' %}"></script>	
+		<script>
+      
+      /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+      
+			////////////////////////////////////////////////////////////// 
+			//////////////////////// Set-Up ////////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			var margin = {top: 100, right: 150, bottom: 100, left: 100},
+				width = Math.min(900, window.innerWidth - 10) - margin.left - margin.right,
+				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+					
+			////////////////////////////////////////////////////////////// 
+			////////////////////////// Data ////////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+			d3.json("{% url 'complianceform:getProductScores' %}", function(scoreDict) { console.log(scoreDict) ;
+
+			var data = [[//Total Percentage
+					  	{axis:"Principle 1",value: scoreDict[1]['principle_1__avg']},
+						{axis:"Principle 2",value: scoreDict[1]['principle_2__avg']},
+						{axis:"Principle 3",value: scoreDict[1]['principle_3__avg']},
+						{axis:"Principle 4",value: scoreDict[1]['principle_4__avg']},
+						{axis:"Principle 5",value: scoreDict[1]['principle_5__avg']},
+						{axis:"Principle 6",value: scoreDict[1]['principle_6__avg']},
+						{axis:"Principle 7",value: scoreDict[1]['principle_7__avg']},
+						{axis:"Principle 8",value: scoreDict[1]['principle_8__avg']},
+						{axis:"Principle 9",value: scoreDict[1]['principle_9__avg']},
+						{axis:"Principle 10",value: scoreDict[1]['principle_10__avg']},
+					  ],
+					  [//Group Percentage
+					  	{axis:"Principle 1",value: scoreDict[2]['principle_1__avg']},
+						{axis:"Principle 2",value: scoreDict[2]['principle_2__avg']},
+						{axis:"Principle 3",value: scoreDict[2]['principle_3__avg']},
+						{axis:"Principle 4",value: scoreDict[2]['principle_4__avg']},
+						{axis:"Principle 5",value: scoreDict[2]['principle_5__avg']},
+						{axis:"Principle 6",value: scoreDict[2]['principle_6__avg']},
+						{axis:"Principle 7",value: scoreDict[2]['principle_7__avg']},
+						{axis:"Principle 8",value: scoreDict[2]['principle_8__avg']},
+						{axis:"Principle 9",value: scoreDict[2]['principle_9__avg']},
+						{axis:"Principle 10",value: scoreDict[2]['principle_10__avg']},
+					]];
+			////////////////////////////////////////////////////////////// 
+			//////////////////// Draw the Chart ////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			var color = d3.scale.ordinal()
+				.range(["#EDC951","#CC333F","#ABABAB"]);
+				
+			var radarChartOptions = {
+			  w: width,
+			  h: height,
+			  margin: margin,
+			  maxValue: 0.5,
+			  levels: 5,
+			  roundStrokes: false,
+			  color: color
+			};
+			//Call function to draw the Radar chart
+			RadarChart(".radarChart", data, radarChartOptions)});
+		</script>
+	</body>
+{% endblock %}
+</html>
