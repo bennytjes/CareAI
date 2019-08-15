@@ -1,0 +1,36 @@
+{% extends 'analytics.html'%}
+{% block chart %}
+<h1>Number of Products (Top 10) </h1>
+
+<select id="group_name" onchange="change_group()">
+        <option value='All' selected="selected">All</option>
+        <option value='Diagnostic'>Diagnostic</option>
+        <option value='Therapeutic'>Therapeutic</option>
+        <option value='Population health'>Population health</option>
+        <option value='Care-based'>Care-based</option>
+        <option value='Triage'>Triage</option>
+        <option value='Self-care'>Selef-care</option>
+        <option value='Health promotion' >Health promotion</option>
+        <option value='Remote Monitoring'>Remote Monitoring</option>
+        <option value='Remote Consultation'>Remote Consultation</option>
+        <option value='Other'>Other</option>
+        <option value=1>1</option>
+</select>
+
+
+<script>
+function change_group(){
+    var groupName = document.getElementById("group_name").value
+    var data = "{{ productCounts }}"
+    document.getElementById("ranking").innerHTML = data;
+}
+
+</script>
+
+<ul>
+{% for count in productCounts %}
+    <li>No. {{ forloop.counter }} {{ count.organisation }} : {{ count.product_count  }} product{{count.product_count| pluralize:",s"}}</li>
+
+{% endfor %}
+</ul>
+{% endblock %}

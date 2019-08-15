@@ -38,7 +38,7 @@
 			//////////////////////// Set-Up ////////////////////////////// 
 			////////////////////////////////////////////////////////////// 
 
-			var margin = {top: 100, right: 100, bottom: 100, left: 100},
+			var margin = {top: 100, right: 150, bottom: 100, left: 100},
 				width = Math.min(900, window.innerWidth - 10) - margin.left - margin.right,
 				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 					
@@ -49,35 +49,46 @@
 
 			var data = [
 					  [//User's Percentage
-						{axis:"Principle 1",value: scoreDict['principle_1']},
-						{axis:"Principle 2",value: scoreDict['principle_2']},
-						{axis:"Principle 3",value: scoreDict['principle_3']},
-						{axis:"Principle 4",value: scoreDict['principle_4']},
-						{axis:"Principle 5",value: scoreDict['principle_5']},
-						{axis:"Principle 6",value: scoreDict['principle_6']},
-						{axis:"Principle 7",value: scoreDict['principle_7']},
-						{axis:"Principle 8",value: scoreDict['principle_8']},
-						{axis:"Principle 9",value: scoreDict['principle_9']},
-						{axis:"Principle 10",value: scoreDict['principle_10']},
+						{axis:"Principle 1",value: scoreDict[0]['principle_1']},
+						{axis:"Principle 2",value: scoreDict[0]['principle_2']},
+						{axis:"Principle 3",value: scoreDict[0]['principle_3']},
+						{axis:"Principle 4",value: scoreDict[0]['principle_4']},
+						{axis:"Principle 5",value: scoreDict[0]['principle_5']},
+						{axis:"Principle 6",value: scoreDict[0]['principle_6']},
+						{axis:"Principle 7",value: scoreDict[0]['principle_7']},
+						{axis:"Principle 8",value: scoreDict[0]['principle_8']},
+						{axis:"Principle 9",value: scoreDict[0]['principle_9']},
+						{axis:"Principle 10",value: scoreDict[0]['principle_10']},
 					  ],[//Total Percentage
-					  	{axis:"Principle 1",value: scoreDict['principle_1__avg']},
-						{axis:"Principle 2",value: scoreDict['principle_2__avg']},
-						{axis:"Principle 3",value: scoreDict['principle_3__avg']},
-						{axis:"Principle 4",value: scoreDict['principle_4__avg']},
-						{axis:"Principle 5",value: scoreDict['principle_5__avg']},
-						{axis:"Principle 6",value: scoreDict['principle_6__avg']},
-						{axis:"Principle 7",value: scoreDict['principle_7__avg']},
-						{axis:"Principle 8",value: scoreDict['principle_8__avg']},
-						{axis:"Principle 9",value: scoreDict['principle_9__avg']},
-						{axis:"Principle 10",value: scoreDict['principle_10__avg']},
-					  ]
-					];
+					  	{axis:"Principle 1",value: scoreDict[1]['principle_1__avg']},
+						{axis:"Principle 2",value: scoreDict[1]['principle_2__avg']},
+						{axis:"Principle 3",value: scoreDict[1]['principle_3__avg']},
+						{axis:"Principle 4",value: scoreDict[1]['principle_4__avg']},
+						{axis:"Principle 5",value: scoreDict[1]['principle_5__avg']},
+						{axis:"Principle 6",value: scoreDict[1]['principle_6__avg']},
+						{axis:"Principle 7",value: scoreDict[1]['principle_7__avg']},
+						{axis:"Principle 8",value: scoreDict[1]['principle_8__avg']},
+						{axis:"Principle 9",value: scoreDict[1]['principle_9__avg']},
+						{axis:"Principle 10",value: scoreDict[1]['principle_10__avg']},
+					  ],
+					  [//Group Percentage
+					  	{axis:"Principle 1",value: scoreDict[2]['principle_1__avg']},
+						{axis:"Principle 2",value: scoreDict[2]['principle_2__avg']},
+						{axis:"Principle 3",value: scoreDict[2]['principle_3__avg']},
+						{axis:"Principle 4",value: scoreDict[2]['principle_4__avg']},
+						{axis:"Principle 5",value: scoreDict[2]['principle_5__avg']},
+						{axis:"Principle 6",value: scoreDict[2]['principle_6__avg']},
+						{axis:"Principle 7",value: scoreDict[2]['principle_7__avg']},
+						{axis:"Principle 8",value: scoreDict[2]['principle_8__avg']},
+						{axis:"Principle 9",value: scoreDict[2]['principle_9__avg']},
+						{axis:"Principle 10",value: scoreDict[2]['principle_10__avg']},
+					]];
 			////////////////////////////////////////////////////////////// 
 			//////////////////// Draw the Chart ////////////////////////// 
 			////////////////////////////////////////////////////////////// 
 
 			var color = d3.scale.ordinal()
-				.range(["#EDC951","#CC333F"]);
+				.range(["#EDC951","#CC333F","#ABABAB"]);
 				
 			var radarChartOptions = {
 			  w: width,

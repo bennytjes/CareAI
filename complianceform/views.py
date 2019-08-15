@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.core.serializers import serialize
 from django.db import connection
+from django.utils.safestring import SafeString
 
 # Create your views here.
 
@@ -205,25 +206,39 @@ def radar(request):
 
 
 def getProductScores(request):
+    scoreList = []
     product_id = request.session['product_id']
     productScores = model_to_dict(Scores.objects.get(product_id_id = product_id))
     allScores = Scores.objects.aggregate(Avg('principle_1'),Avg('principle_2'),Avg('principle_3'),Avg('principle_4'),Avg('principle_5'),Avg('principle_6'),Avg('principle_7'),Avg('principle_8'),Avg('principle_9'),Avg('principle_10'))
-    productScores.update(allScores)
-    return JsonResponse(productScores)
+    groupScores = Scores.objects.filter(pk__in = Products.objects.filter(category = Products.objects.get(pk = product_id).__dict__['category']).values_list('pk', flat = True)).aggregate(Avg('principle_1'),Avg('principle_2'),Avg('principle_3'),Avg('principle_4'),Avg('principle_5'),Avg('principle_6'),Avg('principle_7'),Avg('principle_8'),Avg('principle_9'),Avg('principle_10'))
+    
+    
+    scoreList = [productScores,allScores,groupScores]
+   
+
+    return JsonResponse(scoreList,safe = False)
 
 
 
-def ranking(request):
+def completeness_ranking(request):
     try:
         product_id = request.session['product_id']
     except:
         product_id = 0
-    
-    oneToTen = range(1,11)        
     args = {'product_id':product_id}
-    return render(request, 'ranking.html',args)
+    return render(request, 'completeness_ranking.html',args)
 
-
+def number_ranking(request):
+    cursor = connection.cursor()
+    cursor.execute('''SELECT organisation, COUNT(p.product_id) AS product_count
+                      FROM user_userdetails AS d, user_products AS p
+                      WHERE d.user_id = p.user_id
+                      GROUP BY organisation 
+                      ORDER BY product_count DESC
+                      LIMIT 10''')
+    productCounts = dictfetchall(cursor)
+    productCountsJSON = json.dumps(productCounts)
+    return render(request, 'number_ranking.html', {'productCountsJSON':SafeString(productCountsJSON),'productCounts':productCounts})
 
 def rankingScore(request,group):
     groupFilter = '' if group == 'All' else 'AND p.category = \'' + group+'\''

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from user.forms import RegistrationForm , UserDetailForm , ProductsRegisterForm
 from datetime import date
-from .models import UserDetails, Products
+from .models import *
 
 
 # Create your views here.
@@ -99,6 +99,8 @@ def products_register(request):
             p.added_date = date.today()
             p.user_id = request.user
             p.save()
+            scoreRow = Scores(product_id_id = p.pk)
+            scoreRow.save()
             return redirect('/user/products/')
     else:
         form = ProductsRegisterForm()

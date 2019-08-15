@@ -3,7 +3,7 @@
 function RankingBarChart(id,data){
     
 // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 150, bottom: 20, left: 50},
+    var margin = {top: 10, right: 150, bottom: 100, left: 50},
         width = 1000 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
@@ -35,12 +35,27 @@ function RankingBarChart(id,data){
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x).tickSizeOuter(0));
 
+    svg.append("text")             
+        .attr("transform",
+              "translate(" + (width/2) + " ," + 
+                             (height + margin.top + 20) + ")")
+        .style("text-anchor", "middle")
+        .text("Product Name");
+
     // Add Y axis
     var y = d3.scaleLinear()
         .domain([0, data[0].total])
         .range([ height, 0 ]);
     svg.append("g")
         .call(d3.axisLeft(y));
+        
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Total Percentage Score");
 
     // color palette = one color per subgroup
     var color = d3.scaleOrdinal()

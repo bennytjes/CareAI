@@ -11,7 +11,8 @@ urlpatterns = [
     path('view/<int:entry_id>', views.view_submissions, name = 'view_submission'),
     path('analytics', views.analytics, name = 'analytics'),
     path('radar',views.radar, name = 'radar'),
-    path('ranking',views.ranking, name = 'ranking'),
+    path('completeness_ranking',views.completeness_ranking, name = 'completeness_ranking'),
+    path('number_ranking',views.number_ranking, name = 'number_ranking'),
     path('getProductScores', views.getProductScores, name = 'getProductScores'),
     path('ranking_score/<str:group>', views.rankingScore, name = 'ranking_score'),
 ]
