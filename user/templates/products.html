@@ -3,19 +3,25 @@
 {% block content %}
 
 <h1>Products</h1>
-{% for product in products %}
-<p> Product Name: {{ product.product_name }}</p>
-<a href='/user/products/{{ product.product_id }}'>View/Edit Product</a>
-<p></p> ------------------------------------ </p>
-{% endfor %}
 
-
-<form method="POST">
-
-    {% csrf_token %}
-    
-    <p>
+<p>
         <a href='/user/products/register/'>Register a new product </a>
-    </p>
-</form>
+</p>
+
+<div class = "row">
+    <div class = "col-sm-4"> Product Name</div>
+    <div class = "col-sm-4"> Category</div>
+    <div class = "col-sm-4"> View/Edit Product</div>
+</div>
+<p></p>
+{% for product in products %}
+<div class = "row">
+    <div class = "col-sm-4"> {{ product.product_name }} </div>
+    <div class = "col-sm-4"> {{ product.category }} </div>
+    <div class = "col-sm-4"><a href='/user/products/{{ product.product_id }}'>Edit </a></div>
+</div>
+{% endfor %}
+    
+
 {% endblock %}
+

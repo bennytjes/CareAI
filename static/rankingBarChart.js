@@ -3,7 +3,7 @@
 function RankingBarChart(id,data){
     
 // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 120, bottom: 100, left: 50},
+    var margin = {top: 10, right: 120, bottom: 200, left: 50},
         width = Math.min(800, window.innerWidth - 10) - margin.left - margin.right,
         height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
         
@@ -34,12 +34,18 @@ function RankingBarChart(id,data){
         .padding([0.4])
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSizeOuter(0));
+        .call(d3.axisBottom(x).tickSizeOuter(0))
+        .selectAll("text")
+        .attr("y", 10)
+        .attr("x", -5)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(-30)")
+        .style("text-anchor", "end");
 
     svg.append("text")             
         .attr("transform",
               "translate(" + (width/2) + " ," + 
-                             (height + margin.top + 20) + ")")
+                             (height + margin.top + 80) + ")")
         .style("text-anchor", "middle")
         .text("Product Name");
 

@@ -26,8 +26,8 @@
                     <li class="nav-item"><a class="nav-link" href='/form/analytics'>  Analytics</a></li>
                     <li class="nav-item"><a class="nav-link" href="/user/logout/">  Logout</a></li>
                     {% else %}
-                    <a href="/user/register/">Register</a>
-                    <a href="/user/login/">Log in</a>
+                    <li class="nav-item"><a class="nav-link"  href="/user/register/">Register</a></li>
+                    <li class="nav-item"><a class="nav-link"  href="/user/login/">Log in</a></li>
                     {% endif %}
                 
               </ul>
@@ -36,13 +36,8 @@
         <p>
                
           <div class="container">
-            <div class="row justify-content-center">
-              <div class="col-12">
-                <hr class="mt-0 mb-4">
                 {% block content %}
                 {% endblock %}
-              </div>
-            </div>
           </div>
                       
         </p>

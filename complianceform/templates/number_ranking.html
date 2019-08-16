@@ -4,6 +4,7 @@
 
 <h1>Number of Products (Top 10) </h1>
 
+<p>Select a category:</p>
 <select id="group_name" onchange="change_group()">
         <option value='All' selected="selected">All</option>
         <option value='Diagnostic'>Diagnostic</option>
@@ -46,7 +47,7 @@ function change_group(){
                 var item = document.createElement('li');
 
                 // Set its contents:
-                item.appendChild(document.createTextNode(array[i]['organisation'] +' : '+ array[i]['product_count']));
+                item.appendChild(document.createTextNode(array[i]['organisation'] +' : '+ array[i]['product_count'] + '  product(s)'));
 
                 // Add it to the list:
                 list.appendChild(item);
