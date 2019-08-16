@@ -45,7 +45,7 @@
 			////////////////////////////////////////////////////////////// 
 			////////////////////////// Data ////////////////////////////// 
 			////////////////////////////////////////////////////////////// 
-			d3.json("{% url 'complianceform:getProductScores' %}", function(scoreDict) { console.log(scoreDict) ;
+			d3.json("{% url 'complianceform:getProductScores' group='False' audited='False' %}", function(scoreDict) { console.log(scoreDict) ;
 
 			var data = [
 					  [//User's Percentage
@@ -88,7 +88,7 @@
 			////////////////////////////////////////////////////////////// 
 
 			var color = d3.scale.ordinal()
-				.range(["#EDC951","#CC333F","#ABABAB"]);
+				.range(["#12ab12","#EDC951","#CC333F"]);
 				
 			var radarChartOptions = {
 			  w: width,

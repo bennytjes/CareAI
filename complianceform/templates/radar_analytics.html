@@ -28,9 +28,25 @@
 	</head>
 	<body>
 		<h1>Radar Chart</h1>
-		<div class="radarChart"></div>
 		<script src="{% static 'radarChart.js' %}"></script>	
+		<p>Select a category:</p>
+			<select id="group_name" onchange="DrawRadarChart()">
+				<option value='All' selected="selected">All</option>
+				<option value='Diagnostic'>Diagnostic</option>
+				<option value='Therapeutic'>Therapeutic</option>
+				<option value='Population health'>Population health</option>
+				<option value='Care-based'>Care-based</option>
+				<option value='Triage'>Triage</option>
+				<option value='Self-care'>Selef-care</option>
+				<option value='Health promotion' >Health promotion</option>
+				<option value='Remote Monitoring'>Remote Monitoring</option>
+				<option value='Remote Consultation'>Remote Consultation</option>
+				<option value='Other'>Other</option>
+			</select>
+			<a>      </a>
+		<div class="radarChart"></div>
 		<script>
+		function DrawRadarChart() {
       
       /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
       
@@ -45,7 +61,10 @@
 			////////////////////////////////////////////////////////////// 
 			////////////////////////// Data ////////////////////////////// 
 			////////////////////////////////////////////////////////////// 
-			d3.json("{% url 'complianceform:getProductScores' %}", function(scoreDict) { console.log(scoreDict) ;
+			var urlmask = "{% url 'complianceform:getProductScores' group='gname' audited='auditedTrueOrFalse' %}"
+    		urlmask = urlmask.replace('gname',document.getElementById("group_name").value.toString())
+    		urlmask = urlmask.replace('auditedTrueOrFalse',document.getElementById("audited").checked.toString())
+			d3.json(urlmask, function(scoreDict) { console.log(scoreDict) ;
 
 			var data = [[//Total Percentage
 					  	{axis:"Principle 1",value: scoreDict[1]['principle_1__avg']},
@@ -76,7 +95,7 @@
 			////////////////////////////////////////////////////////////// 
 
 			var color = d3.scale.ordinal()
-				.range(["#EDC951","#CC333F","#ABABAB"]);
+				.range(["#EDC951","#CC333F"]);
 				
 			var radarChartOptions = {
 			  w: width,
@@ -88,8 +107,10 @@
 			  color: color
 			};
 			//Call function to draw the Radar chart
-			RadarChart(".radarChart", data, radarChartOptions)});
+			RadarChart(".radarChart", data, radarChartOptions)})};
+		DrawRadarChart()
 		</script>
+		
 	</body>
 {% endblock %}
 </html>

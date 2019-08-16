@@ -102,6 +102,8 @@ def products_register(request):
             scoreRow = Scores(product_id_id = p.pk)
             scoreRow.save()
             return redirect('/user/products/')
+        else:
+            return render(request,'products_register.html',args)
     else:
         form = ProductsRegisterForm()
         args = {'form':form}

@@ -1,5 +1,7 @@
 {% extends 'analytics.html'%}
 {% block chart %}
+<script src="https://d3js.org/d3.v4.js"></script>
+
 <h1>Number of Products (Top 10) </h1>
 
 <select id="group_name" onchange="change_group()">
@@ -14,15 +16,50 @@
         <option value='Remote Monitoring'>Remote Monitoring</option>
         <option value='Remote Consultation'>Remote Consultation</option>
         <option value='Other'>Other</option>
-        <option value=1>1</option>
 </select>
+<a>      </a>
+<input type="checkbox" onclick="change_group()" id="audited" a/> Audited Only<br>
+<div id='result'></div>
+<p></p>
 
 
 <script>
+change_group()
 function change_group(){
-    var groupName = document.getElementById("group_name").value
-    var data = "{{ productCounts }}"
-    document.getElementById("ranking").innerHTML = data;
+    var urlmask = "{% url 'complianceform:getNumberRanking' group='gname' audited='auditedTrueOrFalse' %}"
+    urlmask = urlmask.replace('gname',document.getElementById("group_name").value.toString())
+    urlmask = urlmask.replace('auditedTrueOrFalse',document.getElementById("audited").checked.toString())
+    d3.json(urlmask, function(error,data){
+        console.log(data)
+        if (Object.keys(data).length == 0){
+        document.getElementById('result').innerHTML='No Result'
+        document.getElementById('result').hidden=false
+      } else {
+        document.getElementById('result').hidden=false
+        document.getElementById('result').innerHTML=''
+        function makeUL(array) {
+    // Create the list element:
+            var list = document.createElement('ol');
+
+            for(var i = 0; i < array.length; i++) {
+                // Create the list item:
+                var item = document.createElement('li');
+
+                // Set its contents:
+                item.appendChild(document.createTextNode(array[i]['organisation'] +' : '+ array[i]['product_count']));
+
+                // Add it to the list:
+                list.appendChild(item);
+            }
+
+            // Finally, return the constructed list:
+            return list;
+        }
+
+            // Add the contents of options[0] to #foo:
+            document.getElementById('result').appendChild(makeUL(data));
+      }
+    })
 }
 
 </script>

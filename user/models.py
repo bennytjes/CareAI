@@ -49,6 +49,7 @@ class Products(models.Model):
     verbose_name='At which point of care do you expect your data-driven solution to be deployed? Select as many as applicable.')
     other_deploy_point = models.CharField(max_length = 100,blank = True, null = True,verbose_name = 'Other point of care:')
     description = models.TextField()
+    audited = models.BooleanField(default=False)
 
 class Scores(models.Model):
     product_id = models.OneToOneField(Products,primary_key = True,on_delete= models.CASCADE)
