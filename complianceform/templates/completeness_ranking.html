@@ -40,7 +40,7 @@
     d3.select('.rankGraph').select("svg").remove();
     var urlmask = "{% url 'complianceform:ranking_score' group='gname' audited='auditedTrueOrFalse' %}"
     urlmask = urlmask.replace('gname',document.getElementById("group_name").value.toString())
-    urlmask = urlmask.replace('auditedTrueOrFalse',document.getElementById("audited").checked.toString())
+    //urlmask = urlmask.replace('auditedTrueOrFalse',document.getElementById("audited").checked.toString())
     d3.json(urlmask, function(error,data){
       console.log()
       if (Object.keys(data).length == 0){
