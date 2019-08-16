@@ -3,8 +3,8 @@
 function RankingBarChart(id,data){
     
 // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 150, bottom: 100, left: 50},
-        width = Math.min(900, window.innerWidth - 10) - margin.left - margin.right,
+    var margin = {top: 10, right: 120, bottom: 100, left: 50},
+        width = Math.min(800, window.innerWidth - 10) - margin.left - margin.right,
         height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
         
 

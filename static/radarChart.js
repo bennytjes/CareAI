@@ -274,7 +274,7 @@ function RadarChart(id, data, options) {
 	  });
 	  
 	}//wrap	
-	var width = window.innerWidth * 0.55
+	var width = window.innerWidth * 0
 	
 	var legend2 = svg.selectAll(".legend2")
         .data(cfg.color.range())
