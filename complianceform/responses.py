@@ -47,7 +47,7 @@ def getProductScores(request,group,audited):
     try:
         product_id = request.session['product_id']
     except:
-        product_id = 1 #any product
+        product_id = 12 #any product
 
     productScores = model_to_dict(Scores.objects.get(product_id_id = product_id))
     if group == 'False':

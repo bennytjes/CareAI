@@ -274,7 +274,8 @@ function RadarChart(id, data, options) {
 	  });
 	  
 	}//wrap	
-	var width =100
+	var width = window.innerWidth * 0.55
+	
 	var legend2 = svg.selectAll(".legend2")
         .data(cfg.color.range())
         .enter().append("g")
@@ -296,7 +297,7 @@ function RadarChart(id, data, options) {
         .style("text-anchor", "start")
         .text(function(d, i) { 
 		  switch (i) {
-			case 0: return 'Average in your group'
+			case 0: return 'Average in the group'
 			case 1: return 'Average over all products'
 			case 2: return 'Your score'
 		  }
