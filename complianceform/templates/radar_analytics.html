@@ -63,7 +63,7 @@
 			////////////////////////////////////////////////////////////// 
 			var urlmask = "{% url 'complianceform:getProductScores' group='gname' audited='auditedTrueOrFalse' %}"
     		urlmask = urlmask.replace('gname',document.getElementById("group_name").value.toString())
-    		urlmask = urlmask.replace('auditedTrueOrFalse',document.getElementById("audited").checked.toString())
+    		//urlmask = urlmask.replace('auditedTrueOrFalse',document.getElementById("audited").checked.toString())
 			d3.json(urlmask, function(scoreDict) { console.log(scoreDict) ;
 
 			var data = [[//Total Percentage
