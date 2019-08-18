@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from user.forms import RegistrationForm , UserDetailForm , ProductsRegisterForm
 from datetime import date
 from .models import *
+from complianceform.models import *
 
 
 # Create your views here.
@@ -51,23 +52,6 @@ def profile(request):
     args={'user':request.user,'detail' : detail_dict,'logged_in' : request.user}
     return render(request,'profile.html',args)
 
-
-####### Django Auth Profile Edit
-# def edit_profile(request):
-#     if request.method == 'POST':
-#         form = UserChangeForm(request.POST,instance = request.user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('/user/profile/')
-#         else:
-#             return redirect('/user/')
-
-#     else:
-#         form = UserChangeForm(instance = request.user)
-#         args = {'form':form}
-        
-#         return render(request, 'edit_profile.html',args)
-
 def profile_edit(request):
     if request.method == 'POST':
         form = UserDetailForm(request.POST)
@@ -110,6 +94,17 @@ def products_register(request):
         return render(request,'products_register.html',args)
 
 def product_edit(request,product_id):
+    request.session['product_id'] = product_id 
+    product = get_object_or_404(Products,pk = product_id).__dict__
+    oneToTen = range(1,11)
+
+    
+
+    args = {'product_id':product_id,
+            'productInfo':product,
+            'oneToTen':oneToTen,
+            'product_id':product_id}
+
     productData = Products.objects.get(product_id = product_id)
     request.session['product_id'] = product_id 
     if request.method == 'POST':
@@ -119,12 +114,20 @@ def product_edit(request,product_id):
             p.user_id_id = request.user.pk
             p.product_id = product_id
             p.save()
-            return render(request, 'product_edit.html',{'form' : form, 'product':productData})
+            args['form'] = form
+            args['product'] = productData
+            return render(request, 'product_edit.html',args)
         else:
-            return render(request, 'product_edit.html',{'form' : form,'product':productData })
+
+            args['form'] = form
+            args['product'] = productData
+            return render(request, 'product_edit.html',args)
     else:
         form = ProductsRegisterForm(productData.__dict__)
-        return render(request, 'product_edit.html',{'form' : form,'product':productData})
+
+        args['form'] = form
+        args['product'] = productData
+        return render(request, 'product_edit.html',args)
     
 def change_password(request):
     if request.method == 'POST':

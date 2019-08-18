@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
-{% block content %}
-<a href="/form/1/principlelist">Back to list </a>
+{% extends 'principle_list.html' %}
+{% block embed %}
+<h1>Submissions </h1>
+
 <div class ="row">
     <div class = "col"> Entry time</div>
     <div class = "col"> Principle </div>
@@ -11,7 +12,7 @@
     <div class = "col"> {{ entry.entry_time }}</div>
     <div class = "col"> {{ entry.principle }} </div>
     <div class = "col"> 
-        <a href = "/form/view/{{ entry.id }}"> View</a>
+        <a href = "/form/view/{{ product_id }}/{{ entry.id }}/"> View</a>
     </div>
 </div>
 {% endfor %}

@@ -37,6 +37,9 @@ DEPLOY_POINT_CHOICES = (('Primary Care','Primary Care'),
                         ('For the purposes of population screening','For the purposes of population screening'),
                         ('Other','Other (please specify)'))
 
+class MSF(MultiSelectField):
+    def _get_val_from_obj(self,object):
+        pass
 
 class Products(models.Model):
     product_id = models.AutoField(primary_key=True)
@@ -45,7 +48,7 @@ class Products(models.Model):
     added_date = models.DateField(default=timezone.now().date())
     category = models.CharField(max_length = 30,choices = CATEGORY_CHOICES)
     other_category = models.CharField(max_length = 30,blank=True, null = True,verbose_name='Other category:')
-    deploy_point = MultiSelectField(max_length= 100,choices=DEPLOY_POINT_CHOICES, default = 'other', 
+    deploy_point = MSF(max_length= 100,choices=DEPLOY_POINT_CHOICES, default = 'other', 
     verbose_name='At which point of care do you expect your data-driven solution to be deployed? Select as many as applicable.')
     other_deploy_point = models.CharField(max_length = 100,blank = True, null = True,verbose_name = 'Other point of care:')
     description = models.TextField()

@@ -10,15 +10,14 @@ from django.forms.models import model_to_dict
 from django.core.serializers import serialize
 from django.db import connection
 from django.utils.safestring import SafeString
-
 # Create your views here.
 
 
 JFAPI_KEY = '7746a94a4b70e6826b90564723ec8049'
 
 
-def principle_list(request,principle_id):
-    product_id = request.session['product_id']
+def principle_list(request,principle_id,product_id):
+    request.session['product_id'] = product_id 
     product = get_object_or_404(Products,pk = product_id).__dict__
     oneToTen = range(1,11)
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
@@ -193,10 +192,22 @@ def form_changed(request):
 
 
 
-def view_submissions(request,entry_id):
+def view_submissions(request,entry_id,product_id):
+    request.session['product_id'] = product_id 
+    product = get_object_or_404(Products,pk = product_id).__dict__
+    oneToTen = range(1,11)
+
+    
+
     entries = Entries.objects.filter(product_id_id = request.session['product_id']).order_by('-entry_time')
     showEntry = Answers.objects.filter(entry_id_id = entry_id)
-    return render(request, 'view_submissions.html', {'entries':entries , 'showEntry': showEntry})
+    args = {'product_id':product_id,
+            'productInfo':product,
+            'oneToTen':oneToTen,
+            'entries':entries , 
+            'showEntry': showEntry}
+
+    return render(request, 'view_submissions.html',args )
 
 
 

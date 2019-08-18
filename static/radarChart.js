@@ -297,7 +297,7 @@ function RadarChart(id, data, options) {
         .style("text-anchor", "start")
         .text(function(d, i) { 
 		  switch (i) {
-			case 0: return 'Average in the group'
+			case 0: return 'Average in category'
 			case 1: return 'Average over all products'
 			case 2: return 'Your score'
 		  }

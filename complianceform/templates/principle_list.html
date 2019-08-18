@@ -8,13 +8,14 @@
 
         {% if productInfo %}
         <h3>{{ productInfo.product_name }}</h3>
+        <a href="/user/products/{{ product_id }}">Edit Product</a>
             <ul>
             {% for principleNo in oneToTen %}
-                <li><a href="/form/{{ principleNo }}/principlelist">Principle {{ principleNo }} </a></li>
+                <li><a href="/form/principlelist/{{ principleNo }}/{{ product_id }}">Principle {{ principleNo }} </a></li>
             {% endfor %}
             </ul>
             <p></p>
-            <a href="/form/view/0">View Submissions</a>
+            <a href="/form/view/{{ product_id }}/0/">View Submissions</a>
             <p></p>
             <a href='/form/radar'>Radar</a>
             <p></p>
