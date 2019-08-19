@@ -8,20 +8,6 @@ from .models import *
 from complianceform.models import *
 
 
-# Create your views here.
-
-
-# def login(request):
-#     if request.user.is_authenticated():
-#         return redirect(request,'/user/profile/')
-#     else:
-#         #form = AuthenticationForm()
-#         args = {'form':form, 'logged_in' : True}
-#         #return render(request,'/user/login',args)
-
-# def logout(request):
-#     return render(request,'/user/logout')
-
 def register(request): 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)

@@ -38,7 +38,6 @@ def principle_list(request,principle_id,product_id):
     
     return render(request, 'embeded_form.html', args)
 
-
 def form_completed(request, principle_id):
     product_id = request.session['product_id']
     product = get_object_or_404(Products,pk = product_id).__dict__
@@ -112,11 +111,6 @@ def form_completed(request, principle_id):
     args['message'] = 'Entry saved'
     return render(request,'form_completed.html', args)
 
-
-    
-
-
-
 def form_changed(request):
     if request.method =='POST':
         form_IDs = JotFormIDs.objects.values_list('jotform_id',flat=True)
@@ -184,13 +178,9 @@ def form_changed(request):
         else:
             success = 'form not changed'
         
-
         return render(request,'form_changed.html',{'message':message, 'success':success})
 
     return render(request,'form_changed.html')
-
-
-
 
 def view_submissions(request,entry_id,product_id):
     request.session['product_id'] = product_id 
@@ -209,9 +199,6 @@ def view_submissions(request,entry_id,product_id):
 
     return render(request, 'view_submissions.html',args )
 
-
-
-
 def radar(request):
     product_id = request.session['product_id']
     product = get_object_or_404(Products,pk = product_id).__dict__
@@ -225,9 +212,6 @@ def radar_analytics(request):
     
     return render(request, 'radar_analytics.html' )
 
-
-
-
 def completeness_ranking(request):
     try:
         product_id = request.session['product_id']
@@ -238,10 +222,6 @@ def completeness_ranking(request):
 
 def number_ranking(request):
     return render(request, 'number_ranking.html')
-
-
-
-
 
 def analytics(request):
     return render(request, 'analytics.html')
