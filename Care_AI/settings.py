@@ -89,12 +89,10 @@ WSGI_APPLICATION = 'Care_AI.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kxfgsknb',
-        'USER': 'kxfgsknb',
-        'PASSWORD': 'UG4dQxPcqx22GREAkbpb6xN1R_yQ_dgE',
-        'HOST': 'manny.db.elephantsql.com',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
         'PORT': '5432',
-        'TEST': {'NAME':'kxfgsknb'}
     }
 }
 # if 'test' in sys.argv:

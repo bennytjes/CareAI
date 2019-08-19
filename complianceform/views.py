@@ -118,8 +118,12 @@ def form_changed(request):
         currentPrinciple = 0
         questionIDInThisVersion = []
         changeFormVersion =[]
-        previousVersionID = Versions.objects.latest('id').id
-        questionIDInPreviousVersion = list(VersionToQuestion.objects.filter(version_id_id = previousVersionID).values_list('question_id_id',flat=True))
+        try:
+            previousVersionID = Versions.objects.latest('id').id
+            questionIDInPreviousVersion = list(VersionToQuestion.objects.filter(version_id_id = previousVersionID).values_list('question_id_id',flat=True))
+        except:
+            questionIDInPreviousVersion = []
+        
 
         notQuestionNames = {
             'header': 'head',

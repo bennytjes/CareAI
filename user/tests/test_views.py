@@ -45,7 +45,7 @@ class Test_User_Views(TestCase):
         self.assertTemplateUsed(response, 'products_register.html')
 
     def test_products_edit_GET(self):
-        response = self.client.get(reverse('user:product_edit',args = [12])) 
+        response = self.client.get(reverse('user:product_edit',args = [self.test_product.pk])) 
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'product_edit.html')
     

@@ -15,11 +15,11 @@ class Test_ComplianceForm_Views(TestCase):
         self.test_userdetail= UserDetails(user_id = self.test_user,username = 'testuser',is_supplier=False)
         self.test_userdetail.save()
         session = self.client.session
-        session['product_id'] = 1
+        session['product_id'] = self.test_product.pk
         session.save()
 
     def test_principle_list_GET(self):
-        response = self.client.get(reverse('complianceform:principle_list',kwargs = {'principle_id' :1, 'product_id': 12}))
+        response = self.client.get(reverse('complianceform:principle_list',kwargs = {'principle_id' :1, 'product_id': self.test_product.pk}))
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'embeded_form.html')
 
@@ -34,7 +34,7 @@ class Test_ComplianceForm_Views(TestCase):
         self.assertTemplateUsed(response, 'form_changed.html')
 
     def test_view_submissions_GET(self):
-        response = self.client.get(reverse('complianceform:view_submissions',kwargs = {'entry_id':0,'product_id':12}))
+        response = self.client.get(reverse('complianceform:view_submissions',kwargs = {'entry_id':0,'product_id':self.test_product.pk}))
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'view_submissions.html')
 
