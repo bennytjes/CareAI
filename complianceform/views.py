@@ -63,7 +63,7 @@ def form_completed(request, principle_id):
             break
 
     if not rightSubmission:
-        args['message'] = 'no new sub'
+        args['message'] = 'No new submission'
         return render(request, 'form_completed.html', args)
 
     for field in rightSubmission['answers'].values():
@@ -81,7 +81,7 @@ def form_completed(request, principle_id):
 
     try:
         newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt)
-        args['message'] = 'No new entry'
+        args['message'] = 'No new submission'
         return render(request,'form_completed.html', args)
     except:
         qCount = 0
@@ -108,7 +108,7 @@ def form_completed(request, principle_id):
             saveScore.save()
             
             
-    args['message'] = 'Entry saved'
+    args['message'] = 'Form Submitted. Please select another form on the left.'
     return render(request,'form_completed.html', args)
 
 def form_changed(request):

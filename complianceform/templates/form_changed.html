@@ -1,7 +1,11 @@
+{% extends 'base.html' %}
 
-
+{% block content %}
+<h1> Form changed on JotForm</h1>
 <form method="POST">
     {% csrf_token %}
-    <button type="submit">Form Changed</button>
+    <button type="submit">Confirm</button>
 </form>
 {{ success }}
+
+{% endblock %}

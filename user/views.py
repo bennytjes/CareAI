@@ -32,6 +32,8 @@ def register(request):
         return render(request, 'reg_form.html', args)
 
 def profile(request):
+    if request.user.is_superuser:
+        return redirect('/')
     detail_dict = UserDetails.objects.get(user_id = request.user.id).__dict__
     if None in detail_dict.values():
         return redirect('/user/profile/edit/')

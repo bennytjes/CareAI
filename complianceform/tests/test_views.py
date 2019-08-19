@@ -17,14 +17,16 @@ class Test_ComplianceForm_Views(TestCase):
         session = self.client.session
         session['product_id'] = self.test_product.pk
         session.save()
+        self.test_form_id = JotFormIDs(principle=11,jotform_id = '0000000000')
+        self.test_form_id.save()
 
     def test_principle_list_GET(self):
-        response = self.client.get(reverse('complianceform:principle_list',kwargs = {'principle_id' :1, 'product_id': self.test_product.pk}))
+        response = self.client.get(reverse('complianceform:principle_list',kwargs = {'principle_id' :self.test_form_id.principle, 'product_id': self.test_product.pk}))
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'embeded_form.html')
 
     def test_form_completed_GET(self):
-        response = self.client.get(reverse('complianceform:form_completed',kwargs = {'principle_id' :1}))
+        response = self.client.get(reverse('complianceform:form_completed',kwargs = {'principle_id' :self.test_form_id.principle,}))
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'form_completed.html')
     

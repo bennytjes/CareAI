@@ -10,7 +10,7 @@
     <body>
         <nav class="navbar navbar-expand-md bg-dark navbar-dark">
             <!-- Brand -->
-            <a class="navbar-brand mb-0 h1" href="#">Care AI</a>
+            <a class="navbar-brand mb-0 h1" href="/">Care AI</a>
           
             <!-- Toggler/collapsibe Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -20,11 +20,14 @@
             <!-- Navbar links -->
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
               <ul class="navbar-nav">
-                    {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                    <li class="nav-item"><a class="nav-link" href="/form/form_changed">Form Changed</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/user/logout/">Logout</a></li>
+                    {% elif user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="/user/profile/">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href='/user/products/'>  My Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href='/form/analytics'>  Analytics</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/user/logout/">  Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href='/user/products/'>My Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href='/form/analytics'>Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/user/logout/">Logout</a></li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link"  href="/user/register/">Register</a></li>
                     <li class="nav-item"><a class="nav-link"  href="/user/login/">Log in</a></li>
