@@ -75,7 +75,7 @@ def getNumberRanking(request,group,audited):
                       ORDER BY product_count DESC
                       LIMIT 10''')
 
-    productCounts = dictfetchall(cursor)
+    productCounts = dictfetchall(cursor)[:10]
     return JsonResponse(productCounts,safe=False)
 
 def dictfetchall(cursor):
