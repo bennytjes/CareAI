@@ -2,5 +2,5 @@ language: python
 services: postgreSQL
 
 script: 
-  python3 manage.py runserver
-  python3 manage.py test -k
+  - python3 manage.py runserver
+  - python3 manage.py test -k
