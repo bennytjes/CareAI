@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
-from django.utils import timezone
+from django.utils.timezone import now
 from multiselectfield import MultiSelectField
 
 # Create your models here.
@@ -45,7 +45,7 @@ class Products(models.Model):
     product_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User,on_delete = models.CASCADE,db_column='user_id')
     product_name = models.CharField(max_length = 100,default = 'product name')
-    added_date = models.DateField(default=timezone.now().date())
+    added_date = models.DateField(default=now().date())
     category = models.CharField(max_length = 30,choices = CATEGORY_CHOICES)
     other_category = models.CharField(max_length = 30,blank=True, null = True,verbose_name='Other category:')
     deploy_point = MSF(max_length= 100,choices=DEPLOY_POINT_CHOICES, default = 'other', 

@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'polls.apps.PollsConfig',
     'user.apps.UserConfig',
     'complianceform.apps.ComplianceformConfig',
     'crispy_forms',
@@ -90,12 +89,12 @@ WSGI_APPLICATION = 'Care_AI.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lzgsgafa',
-        'USER': 'lzgsgafa',
-        'PASSWORD': 'WTHu3Q8x7elW66naqsWDsE3myTuBG9Cd',
+        'NAME': 'kxfgsknb',
+        'USER': 'kxfgsknb',
+        'PASSWORD': 'UG4dQxPcqx22GREAkbpb6xN1R_yQ_dgE',
         'HOST': 'manny.db.elephantsql.com',
         'PORT': '5432',
-        'TEST': {'NAME':'lzgsgafa'}
+        'TEST': {'NAME':'kxfgsknb'}
     }
 }
 # if 'test' in sys.argv:

@@ -27,7 +27,6 @@ class Test_User_Views(TestCase):
     
     def test_profile_GET(self):
         response = self.client.get(reverse('user:profile'))
-        print(response)
         self.assertEquals(response.status_code,302)
 
     def test_profile_edit_GET(self):

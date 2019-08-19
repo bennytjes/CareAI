@@ -2,11 +2,13 @@ from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from user.views import *
 from django.contrib.auth.views import LoginView,LogoutView
+from user.models import Products
 
 class Test_User_Urls(SimpleTestCase):
     def test_login(self):
         url = reverse('user:login')
         self.assertEquals(resolve(url).func.view_class,LoginView)
+        self.testProduct = Products()
     
     def test_logout(self):
         url = reverse('user:logout')

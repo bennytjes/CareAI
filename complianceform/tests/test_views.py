@@ -15,7 +15,7 @@ class Test_ComplianceForm_Views(TestCase):
         self.test_userdetail= UserDetails(user_id = self.test_user,username = 'testuser',is_supplier=False)
         self.test_userdetail.save()
         session = self.client.session
-        session['product_id'] = 12
+        session['product_id'] = 1
         session.save()
 
     def test_principle_list_GET(self):
