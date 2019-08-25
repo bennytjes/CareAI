@@ -8,6 +8,7 @@ urlpatterns = [
     path('principlelist/<int:principle_id>/<int:product_id>', views.principle_list, name= 'principle_list'),
     path('<int:principle_id>/complete', views.form_completed, name = 'form_completed'),
     path('form_changed', views.form_changed, name = 'form_changed'),
+    path('JotFormID',views.JotFormID, name = 'JotFormID'),
     path('view/<int:product_id>/<int:entry_id>/', views.view_submissions, name = 'view_submissions'),
     path('analytics', views.analytics, name = 'analytics'),
     path('radar',views.radar, name = 'radar'),

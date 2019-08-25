@@ -10,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.core.serializers import serialize
 from django.db import connection
 from django.utils.safestring import SafeString
+from .forms import JotFormIDForm
 # Create your views here.
 
 
@@ -111,6 +112,36 @@ def form_completed(request, principle_id):
     args['message'] = 'Form Submitted. Please select another form on the left.'
     return render(request,'form_completed.html', args)
 
+
+def JotFormID(request):
+    if request.method == 'POST':
+        form = JotFormIDForm(request.POST)
+        if form.is_valid():
+            for i in range(1,11):
+                try:
+                    jfID = JotFormIDs.objects.get(principle = i+1)
+                except:
+                    jfID = JotFormIDs(principle =i+1)
+                jfID.jotform_id = form.cleaned_data['principle_'+str(i)]
+                jfID.save()
+
+            message = "ID saved"
+        else:
+            message = "Invalid Form"
+
+    else:
+        formIDDict = {}
+        for i in range(1,11):
+            try:
+                formIDDict['principle_'+str(i)] = JotFormIDs.objects.get(principle = i).jotform_id
+            except:
+                pass
+        form = JotFormIDForm(formIDDict)
+        message = ''
+
+    return render(request, 'JotFormID.html', {'form': form, 'message':message})
+
+
 def form_changed(request):
     if request.method =='POST':
         form_IDs = JotFormIDs.objects.values_list('jotform_id',flat=True)
@@ -165,7 +196,7 @@ def form_changed(request):
         message.append(questionIDInPreviousVersion)
         message.append(questionIDInThisVersion)
 
-        if questionIDInPreviousVersion != questionIDInThisVersion: #Changes
+        if set(questionIDInPreviousVersion) != set(questionIDInThisVersion): #Changes
             newVersion = Versions(online_date = date.today())
             newVersion.save()
             for qid in questionIDInThisVersion:

@@ -22,6 +22,7 @@
               <ul class="navbar-nav">
                     {% if user.is_superuser %}
                     <li class="nav-item"><a class="nav-link" href="/form/form_changed">Form Changed</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/form/JotFormID">JotForm Form ID</a></li>
                     <li class="nav-item"><a class="nav-link" href="/user/logout/">Logout</a></li>
                     {% elif user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="/user/profile/">Profile</a></li>
