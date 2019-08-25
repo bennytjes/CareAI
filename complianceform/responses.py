@@ -19,7 +19,8 @@ def getRankingScores(request,group,audited):
     cursor.execute(f'''SELECT * , (s.principle_1+s.principle_2+s.principle_3+s.principle_4+s.principle_5+s.principle_6+s.principle_7+s.principle_8+s.principle_9+s.principle_10) AS total
                       From user_scores AS s, user_products AS p
                       WHERE s.product_id_id = p.product_id {groupFilter} {auditedFilter}
-                      ORDER BY total DESC''')
+                      ORDER BY total DESC
+                      LIMIT 10''')
     productScores = dictfetchall(cursor)
     scoreList =[]
     for row in productScores:
