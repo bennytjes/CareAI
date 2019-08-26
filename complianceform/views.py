@@ -81,13 +81,13 @@ def form_completed(request, principle_id):
             product_id = int(field['answer'])
 
     try:
-        newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt)
+        newEntry = Entries.objects.get(product_id_id = product_id, entry_time = createdAt+"-05:00")
         args['message'] = 'No new submission'
         return render(request,'form_completed.html', args)
     except:
         qCount = 0
         aCount = 0
-        newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt, jotform_submission_id = submissionID, principle = principle_id )
+        newEntry = Entries(product_id_id = product_id, version_id_id = version, entry_time = createdAt+"-05:00", jotform_submission_id = submissionID, principle = principle_id )
         newEntry.save()
         for qpk, answer in saveAnswer:
             qCount +=1
@@ -119,9 +119,9 @@ def JotFormID(request):
         if form.is_valid():
             for i in range(1,11):
                 try:
-                    jfID = JotFormIDs.objects.get(principle = i+1)
+                    jfID = JotFormIDs.objects.get(principle = i)
                 except:
-                    jfID = JotFormIDs(principle =i+1)
+                    jfID = JotFormIDs(principle =i)
                 jfID.jotform_id = form.cleaned_data['principle_'+str(i)]
                 jfID.save()
 
