@@ -119,11 +119,16 @@ def product_edit(request,product_id):
     
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.POST,user = request.user)
+        form = PasswordChangeForm(user = request.user, data = request.POST)
         
         if form.is_valid():
             form.save()
+            autoLogin = auth.authenticate(username=request.user,
+                                     password=form.cleaned_data['new_password1'],
+                                    )
+            auth.login(request, autoLogin)
             return redirect('/user/profile/')
+
     else:
         form = PasswordChangeForm(user = request.user)
         return render(request,'change_password.html',{'form': form})
