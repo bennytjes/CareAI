@@ -41,3 +41,5 @@ class Test_User_Urls(SimpleTestCase):
     def test_products_edit(self):
         url = reverse('user:product_edit', args = [12])
         self.assertEquals(resolve(url).func,product_edit)       
+
+    

@@ -64,3 +64,12 @@ class Test_ComplianceForm_Views(TestCase):
         response = self.client.get(reverse('complianceform:analytics'))
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'analytics.html')
+
+    def test_JotFormID_GET(self):
+        response = self.client.get(reverse('complianceform:JotFormID'))
+        self.assertEquals(response.status_code,200)
+        self.assertTemplateUsed(response, 'JotFormID.html')
+
+    def test_JotformID_POST(self):
+        response = self.client.post('/form/JotFormID',{})
+        self.assertEquals(response.status_code,200)

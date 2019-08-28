@@ -17,6 +17,10 @@ class Test_ComplianceForm_Urls(SimpleTestCase):
         url = reverse('complianceform:form_changed')
         self.assertEquals(resolve(url).func,form_changed)
 
+    def test_JotFormID(self):
+        url = reverse('complianceform:JotFormID')
+        self.assertEquals(resolve(url).func,JotFormID)
+
     def test_view_submissions(self):
         url = reverse('complianceform:view_submissions',kwargs = {'product_id' :12, 'entry_id': 0})
         self.assertEquals(resolve(url).func,view_submissions)
@@ -32,7 +36,6 @@ class Test_ComplianceForm_Urls(SimpleTestCase):
     def test_number_ranking(self):
         url = reverse('complianceform:number_ranking')
         self.assertEquals(resolve(url).func,number_ranking)
-
     
     def test_radar_analytics(self):
         url = reverse('complianceform:radar_analytics')

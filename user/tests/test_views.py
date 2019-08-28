@@ -25,6 +25,11 @@ class Test_User_Views(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'change_password.html')
     
+    def test_change_password_POST(self):
+        response = self.client.post('/user/change_password/',{'old_password': 'djangodjango','new_password1':'superdjango','new_password2':'superdjango'})
+        self.assertEquals(response.status_code,302)
+        self.assertEquals(response.url,"/user/profile/")
+
     def test_profile_GET(self):
         response = self.client.get(reverse('user:profile'))
         self.assertEquals(response.status_code,302)
@@ -33,6 +38,10 @@ class Test_User_Views(TestCase):
         response = self.client.get(reverse('user:profile_edit'))
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'profile_edit.html')
+
+    def test_profile_edit_POST(self):
+        response = self.client.get('/user/profile/edit/',{'first_name':'John'})
+        self.assertEquals(response.status_code,200)
     
     def test_products_GET(self):
         response = self.client.get(reverse('user:products'))
@@ -44,9 +53,17 @@ class Test_User_Views(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'products_register.html')
 
+    def test_products_register_POST(self):
+        response = self.client.post('/user/products/register/',{'product_name':'new test product'})
+        self.assertEquals(response.status_code,200)
+
     def test_products_edit_GET(self):
         response = self.client.get(reverse('user:product_edit',args = [self.test_product.pk])) 
         self.assertEquals(response.status_code,200)
         self.assertTemplateUsed(response, 'product_edit.html')
     
+    def test_products_edit_POST(self):
+        response = self.client.post('/user/products/'+str(self.test_product.pk),{'product_name':'another test name'})
+        self.assertEquals(response.status_code,200)
+
 

@@ -45,7 +45,7 @@ class Products(models.Model):
     product_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User,on_delete = models.CASCADE,db_column='user_id')
     product_name = models.CharField(max_length = 100,default = 'product name')
-    added_date = models.DateField(default=now().date())
+    added_date = models.DateField(default=date.today)
     category = models.CharField(max_length = 30,choices = CATEGORY_CHOICES)
     other_category = models.CharField(max_length = 30,blank=True, null = True,verbose_name='Other category:')
     deploy_point = MSF(max_length= 100,choices=DEPLOY_POINT_CHOICES, default = 'other', 
