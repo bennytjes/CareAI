@@ -181,7 +181,7 @@ def form_changed(request):
                     message.append(newQuestion.pk)
                     questionIDInThisVersion.append(newQuestion.pk)
                 elif content['name'].lower().startswith('version'):
-                    changeFormVersion.append([ID,content['qid']])
+                    changeFormVersion.append([ID.jotform_id,content['qid']])
 
         questionIDInPreviousVersion.sort()
         questionIDInThisVersion.sort()
