@@ -1,19 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from .models import *
-from user.models import *
+from .models import Questions, Versions,VersionToQuestion,Entries,Answers,JotFormIDs
+from user.models import Products,Scores
 import requests
 from datetime import date
-from django.db.models import Subquery,Max ,Avg
-import json
-from django.http import JsonResponse 
-from django.forms.models import model_to_dict
-from django.core.serializers import serialize
-from django.db import connection
-from django.utils.safestring import SafeString
 from .forms import JotFormIDForm
 # Create your views here.
 
-
+#API KEY for the corresponding JotForm account
 JFAPI_KEY = '7746a94a4b70e6826b90564723ec8049'
 
 
@@ -22,7 +15,6 @@ def principle_list(request,principle_id,product_id):
     product = get_object_or_404(Products,pk = product_id).__dict__
     oneToTen = range(1,11)
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
-
     entries = Entries.objects.filter(product_id_id = product_id,principle = principle_id).order_by('-entry_time')
     url = 'https://form.jotformeu.com/jsform/' + form_ID + '?product_id=' + str(product_id)+'&username=' + str(request.user)
     if entries.count() != 0: #no previous entry
@@ -43,7 +35,7 @@ def form_completed(request, principle_id):
     product_id = request.session['product_id']
     product = get_object_or_404(Products,pk = product_id).__dict__
     form_ID = JotFormIDs.objects.get(principle = principle_id).jotform_id
-    r = requests.get('https://api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&orderby=created_at').json()['content']
+    r = requests.get('https://eu-api.jotform.com/form/'+ form_ID +'/submissions?apiKey='+ JFAPI_KEY +'&orderby=created_at').json()['content']
     saveAnswer = []
     subFound = False
     rightSubmission = None
@@ -144,7 +136,7 @@ def JotFormID(request):
 
 def form_changed(request):
     if request.method =='POST':
-        form_IDs = JotFormIDs.objects.values_list('jotform_id',flat=True)
+        form_IDs = JotFormIDs.objects.all()
         message=[]
         currentPrinciple = 0
         questionIDInThisVersion = []
@@ -166,8 +158,8 @@ def form_changed(request):
         }
         # Itterate through the forms
         for ID in form_IDs:
-            r = requests.get('https://api.jotform.com/form/'+ID+'/questions?apiKey='+JFAPI_KEY).json()['content']
-            currentPrinciple += 1
+            r = requests.get('https://eu-api.jotform.com/form/'+ID.jotform_id+'/questions?apiKey='+JFAPI_KEY).json()['content']
+            currentPrinciple = ID.principle
 
             # Itterate through the items in each form response
             for content in r.values():
@@ -183,7 +175,7 @@ def form_changed(request):
                         newQuestion = Questions(description = content['text'], in_principle = currentPrinciple)
                         newQuestion.save() #Changes
 
-                    requests.post('https://api.jotform.com/form/'+ID+'/question/'+content['qid']+'?apiKey='+JFAPI_KEY,
+                    requests.post('https://eu-api.jotform.com/form/'+ID+'/question/'+content['qid']+'?apiKey='+JFAPI_KEY,
                                        data = {'question[name]' : 'question_id_'+ str(newQuestion.pk)}) #Changes
 
                     message.append(newQuestion.pk)
@@ -207,7 +199,7 @@ def form_changed(request):
             success = 'form changed'
 
             for ID,qid in changeFormVersion:
-                requests.post('https://api.jotform.com/form/'+ID+'/question/'+str(qid)+'?apiKey='+JFAPI_KEY,
+                requests.post('https://eu-api.jotform.com/form/'+ID+'/question/'+str(qid)+'?apiKey='+JFAPI_KEY,
                                        data = {'question[text]' : str(newVersion.pk) })
                 message.append([ID,qid])
         else:
