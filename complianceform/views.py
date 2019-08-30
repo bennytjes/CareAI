@@ -175,7 +175,7 @@ def form_changed(request):
                         newQuestion = Questions(description = content['text'], in_principle = currentPrinciple)
                         newQuestion.save() #Changes
 
-                    requests.post('https://eu-api.jotform.com/form/'+ID+'/question/'+content['qid']+'?apiKey='+JFAPI_KEY,
+                    requests.post('https://eu-api.jotform.com/form/'+ID.jotform_id+'/question/'+content['qid']+'?apiKey='+JFAPI_KEY,
                                        data = {'question[name]' : 'question_id_'+ str(newQuestion.pk)}) #Changes
 
                     message.append(newQuestion.pk)
