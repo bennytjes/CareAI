@@ -1,4 +1,7 @@
-
+//Most of the code below is adapted from:
+//J. Cruz-Benito, “Stacked Bar Chart with Legend,” [Online]. Available: https://gist.github.com/cbjuan/43f10523858abf6053ae [Accessed 31 8 2019].
+//M. Stanaland, “Stacked bar chart with tooltips,” [Online]. Available: http://bl.ocks.org/mstanaland/6100713 [Accessed 31 8 2019].
+//with some tweeks to fit the project
 
 function RankingBarChart(id,data){
     
@@ -19,12 +22,12 @@ function RankingBarChart(id,data){
 
     
     console.log(data)
-    // List of subgroups = header of the csv files = soil condition here
+    // List of subgroups 
     var subgroups = Object.keys(data[0])
     subgroups.shift()
     subgroups.shift()
     console.log(subgroups)
-    // List of groups = species here = value of the first column called group -> I show them on the X axis
+    // List of groups 
     var groups = d3.map(data, function(d){return(d.product_name)}).keys()
     console.log(groups)
     // Add X axis

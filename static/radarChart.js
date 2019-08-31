@@ -1,3 +1,9 @@
+//Most of the code below  is adapted from:
+//N. Bremer, “Radar Chart Redesign,” [Online]. Available: http://bl.ocks.org/nbremer/21746a9668ffdf6d8242
+//With some tweek to fit the project, such as the legend and data input
+
+
+
 /////////////////////////////////////////////////////////
 /////////////// The Radar Chart Function ////////////////
 /////////////// Written by Nadieh Bremer ////////////////
