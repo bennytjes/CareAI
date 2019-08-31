@@ -4,21 +4,7 @@ from datetime import date
 from django.utils.timezone import now
 from multiselectfield import MultiSelectField
 
-# Create your models here.
-
-class UserDetails(models.Model):
-    user_id = models.OneToOneField(User,on_delete = models.CASCADE,primary_key = True,default=0,db_column='user_id')
-    username = models.CharField(max_length = 50,null=True)
-    is_supplier = models.BooleanField(default = False,verbose_name = 'I am a supplier')
-    first_name = models.CharField(max_length = 20,null=True)
-    last_name = models.CharField(max_length = 20,null=True)
-    organisation = models.CharField(max_length = 50,null=True)
-    town_city = models.CharField(max_length = 20,null=True)
-    post_code = models.CharField(max_length = 10,null=True)
-    phone = models.CharField(max_length = 20,null=True)
-
-
-
+#Tuples of Choices for the choice fields
 CATEGORY_CHOICES = (('Diagnostic','Diagnostic'),
                         ('Therapeutic','Therapeutic'),
                         ('Population health','Population health'),
@@ -37,9 +23,25 @@ DEPLOY_POINT_CHOICES = (('Primary Care','Primary Care'),
                         ('For the purposes of population screening','For the purposes of population screening'),
                         ('Other','Other (please specify)'))
 
+#The MultiSelectField library has a bug in it
+#This overwirtes the error which was not used in the platform
 class MSF(MultiSelectField):
     def _get_val_from_obj(self,object):
         pass
+
+
+#The Three Tables of the User app
+class UserDetails(models.Model):
+    user_id = models.OneToOneField(User,on_delete = models.CASCADE,primary_key = True,default=0,db_column='user_id')
+    username = models.CharField(max_length = 50,null=True)
+    is_supplier = models.BooleanField(default = False,verbose_name = 'I am a supplier')
+    first_name = models.CharField(max_length = 20,null=True)
+    last_name = models.CharField(max_length = 20,null=True)
+    organisation = models.CharField(max_length = 50,null=True)
+    town_city = models.CharField(max_length = 20,null=True)
+    post_code = models.CharField(max_length = 10,null=True)
+    phone = models.CharField(max_length = 20,null=True)
+
 
 class Products(models.Model):
     product_id = models.AutoField(primary_key=True)

@@ -4,10 +4,9 @@ from django.contrib.auth.models import User
 from .models import UserDetails, Products
 from datetime import date
 
-
+#Custom registration form which only takes username, email and password
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    # is_supplier = forms.BooleanField()
 
     class Meta:
         model = User
@@ -27,6 +26,8 @@ class RegistrationForm(UserCreationForm):
 
         return user    
 
+#Custom user detail model form from the UserDetails model
+#With username as read only field
 class UserDetailForm(forms.ModelForm):
     class Meta:
         model= UserDetails
@@ -44,6 +45,8 @@ class UserDetailForm(forms.ModelForm):
             'username': forms.TextInput(attrs={'readonly': 'readonly'}),
         }
 
+#Custom product form from the Products model
+#With added_date as read only field and deploy_point as a multiple checkbox field.
 class ProductsRegisterForm(forms.ModelForm):
     class Meta:
         model = Products

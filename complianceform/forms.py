@@ -1,5 +1,6 @@
 from django import forms
 
+#Model form for the JotFormIDs page
 class JotFormIDForm(forms.Form):
     principle_1 = forms.CharField(label='Principle 1', max_length=14,required=False)
     principle_2 = forms.CharField(label='Principle 2', max_length=14,required=False)

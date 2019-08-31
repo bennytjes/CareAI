@@ -1,21 +1,17 @@
-from django.shortcuts import render, get_object_or_404
-from .models import *
-from user.models import *
-import requests
-from datetime import date
+from user.models import Scores, Products
 from django.db.models import Subquery,Max ,Avg
-import json
 from django.http import JsonResponse 
 from django.forms.models import model_to_dict
-from django.core.serializers import serialize
 from django.db import connection
-from django.utils.safestring import SafeString
 
-
+#JSON response for the Stacked Bar Chart
 def getRankingScores(request,group,audited):
+    #Load the filter for the query
     groupFilter = '' if group == 'All' else 'AND p.category = \'' + group+'\''
     auditedFilter = 'AND P.audited = TRUE' if audited=='true' else ''
     cursor = connection.cursor()
+
+    #The raw SQL query for geting the scores of top ten compliance completeness
     cursor.execute(f'''SELECT * , (s.principle_1+s.principle_2+s.principle_3+s.principle_4+s.principle_5+s.principle_6+s.principle_7+s.principle_8+s.principle_9+s.principle_10) AS total
                       From user_scores AS s, user_products AS p
                       WHERE s.product_id_id = p.product_id {groupFilter} {auditedFilter}
@@ -23,6 +19,8 @@ def getRankingScores(request,group,audited):
                       LIMIT 10''')
     productScores = dictfetchall(cursor)
     scoreList =[]
+
+    #Turning the result into a list of JSON
     for row in productScores:
         scoreList.append({'product_name': row['product_name'],
                           'total' : row['total'],
@@ -40,15 +38,16 @@ def getRankingScores(request,group,audited):
     return JsonResponse(scoreList,safe=False)
 
 
+#JSON response for the Radar Chart
 def getProductScores(request,group,audited):
-
     groupFilter = '' if group == 'All' else 'AND p.category = \'' + group+'\''
-
     scoreList = []
+
     try:
         product_id = request.session['product_id']
     except:
-        product_id = Scores.objects.all()[0].product_id_id #any product
+        #If not product_id stored in session, meaning tha this request is from the analytics page without clicking into any product details yet
+        product_id = Scores.objects.all()[0].product_id_id #assign the product id from any product
 
     productScores = model_to_dict(Scores.objects.get(product_id_id = product_id))
     if group == 'False':
@@ -56,7 +55,7 @@ def getProductScores(request,group,audited):
     else: 
         groupFilter = group
     
-
+    #Get the score from all products and from the group
     allScores = Scores.objects.aggregate(Avg('principle_1'),Avg('principle_2'),Avg('principle_3'),Avg('principle_4'),Avg('principle_5'),Avg('principle_6'),Avg('principle_7'),Avg('principle_8'),Avg('principle_9'),Avg('principle_10'))
     groupScores = Scores.objects.filter(pk__in = Products.objects.filter(category = groupFilter).values_list('pk', flat = True)).aggregate(Avg('principle_1'),Avg('principle_2'),Avg('principle_3'),Avg('principle_4'),Avg('principle_5'),Avg('principle_6'),Avg('principle_7'),Avg('principle_8'),Avg('principle_9'),Avg('principle_10'))
 
@@ -65,6 +64,7 @@ def getProductScores(request,group,audited):
     scoreList = [productScores,allScores,groupScores]
     return JsonResponse(scoreList,safe = False)
 
+#JSON response for number of products ranking.
 def getNumberRanking(request,group,audited):
     groupFilter = '' if group == 'All' else 'AND p.category = \'' + group+'\''
     auditedFilter = 'AND P.audited = TRUE' if audited=='true' else ''
@@ -79,6 +79,9 @@ def getNumberRanking(request,group,audited):
     productCounts = dictfetchall(cursor)[:10]
     return JsonResponse(productCounts,safe=False)
 
+
+#Fucntion to change the raw query result to dict
+#Provided by https://docs.djangoproject.com/en/2.2/topics/db/sql/
 def dictfetchall(cursor):
     # "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]

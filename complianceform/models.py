@@ -1,7 +1,6 @@
 from django.db import models
 from user.models import Products
 
-# Create your models here.
 class Questions(models.Model):
     description = models.TextField()
     in_principle = models.IntegerField()
