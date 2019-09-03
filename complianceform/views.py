@@ -170,7 +170,7 @@ def form_changed(request):
         currentPrinciple = 0
         questionIDInThisVersion = []
         changeFormVersion =[]
-        #Get a list of questions form the previous version
+        #Get a list of questions from the previous version
         try:
             previousVersionID = Versions.objects.latest('id').id
             questionIDInPreviousVersion = list(VersionToQuestion.objects.filter(version_id_id = previousVersionID).values_list('question_id_id',flat=True))
@@ -178,7 +178,7 @@ def form_changed(request):
             #Empty list if this is the very first version
             questionIDInPreviousVersion = []
         
-        #A dict of kewwords which are not questions. To identy the question fields from the other.
+        #A dict of keywords which are not questions. To identify the question fields from the other.
         notQuestionNames = {
             'header': 'head',
             'header_default': 'principle',
@@ -187,12 +187,12 @@ def form_changed(request):
             'version id' : 'version',
             'username': 'username'
         }
-        # Itterate through the forms
+        # Iterate through the forms
         for ID in form_IDs:
             r = requests.get('https://eu-api.jotform.com/form/'+ID.jotform_id+'/questions?apiKey='+JFAPI_KEY).json()['content']
             currentPrinciple = ID.principle
 
-            # Itterate through the items in each form response
+            # Iterate through the items in each form response
             for content in r.values():
                 message.append([currentPrinciple,content['name'],content['text'],content['qid']])
 

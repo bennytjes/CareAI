@@ -11,7 +11,7 @@ def getRankingScores(request,group,audited):
     auditedFilter = 'AND P.audited = TRUE' if audited=='true' else ''
     cursor = connection.cursor()
 
-    #The raw SQL query for geting the scores of top ten compliance completeness
+    #The raw SQL query for getting the scores of top ten compliance completeness
     cursor.execute(f'''SELECT * , (s.principle_1+s.principle_2+s.principle_3+s.principle_4+s.principle_5+s.principle_6+s.principle_7+s.principle_8+s.principle_9+s.principle_10) AS total
                       From user_scores AS s, user_products AS p
                       WHERE s.product_id_id = p.product_id {groupFilter} {auditedFilter}
@@ -46,7 +46,7 @@ def getProductScores(request,group,audited):
     try:
         product_id = request.session['product_id']
     except:
-        #If not product_id stored in session, meaning tha this request is from the analytics page without clicking into any product details yet
+        #If not product_id stored in session, meaning that this request is from the analytics page without clicking into any product details yet
         product_id = Scores.objects.all()[0].product_id_id #assign the product id from any product
 
     productScores = model_to_dict(Scores.objects.get(product_id_id = product_id))
@@ -80,7 +80,7 @@ def getNumberRanking(request,group,audited):
     return JsonResponse(productCounts,safe=False)
 
 
-#Fucntion to change the raw query result to dict
+#Function to change the raw query result to dict
 #Provided by https://docs.djangoproject.com/en/2.2/topics/db/sql/
 def dictfetchall(cursor):
     # "Return all rows from a cursor as a dict"

@@ -137,8 +137,6 @@ function RankingBarChart(id,data){
         .attr("width", 18)
         .attr("height", 18)
         .style("fill", function(d, i) {return color.range().slice().reverse()[i];});
-    
-    
 
     legend.append("text")
         .attr("x", width + 5)

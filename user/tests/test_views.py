@@ -1,6 +1,6 @@
 from django.test import TestCase,Client
 from django.urls import reverse
-from user.models import *
+from user.models import UserDetails,Products,Scores
 import json
 from django.contrib.auth.models import User
 
